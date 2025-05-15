@@ -26,11 +26,11 @@ public class MusicAppGUI extends JFrame {
     private static final int WINDOW_WIDTH = 900;
     private static final int WINDOW_HEIGHT = 650;
 
-    private final DiscManager discManager;
-    private final DefaultListModel<MusicCompilation> listModel;
-    private JList<MusicCompilation> compilationList;
-    private JLabel statusBar;
-    private CompilationSearchPanel searchPanel;
+    DiscManager discManager;
+    DefaultListModel<MusicCompilation> listModel;
+    JList<MusicCompilation> compilationList;
+    JLabel statusBar;
+    CompilationSearchPanel searchPanel;
 
     /**
      * Конструктор ініціалізує графічний інтерфейс та налаштовує список збірок.
@@ -45,7 +45,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Ініціалізує основні компоненти графічного інтерфейсу.
      */
-    private void initializeUI() {
+    void initializeUI() {
         configureWindow();
         JPanel mainPanel = createMainPanel();
         add(mainPanel);
@@ -55,7 +55,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Налаштовує параметри вікна програми.
      */
-    private void configureWindow() {
+    void configureWindow() {
         setTitle("Менеджер музичних збірок");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -69,7 +69,7 @@ public class MusicAppGUI extends JFrame {
      *
      * @return налаштована головна панель
      */
-    private JPanel createMainPanel() {
+    JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(BACKGROUND_COLOR);
@@ -97,7 +97,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Налаштовує зовнішній вигляд інтерфейсу відповідно до системного стилю.
      */
-    private void setupLookAndFeel() {
+    void setupLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             UIManager.put("ScrollPane.background", BACKGROUND_COLOR);
@@ -115,14 +115,14 @@ public class MusicAppGUI extends JFrame {
      *
      * @param compilation музична збірка для відображення
      */
-    private void showDetails(MusicCompilation compilation) {
+    void showDetails(MusicCompilation compilation) {
         new CompilationDetailsDialog(this, compilation).setVisible(true);
     }
 
     /**
      * Завантажує дані з файлу, оновлює список збірок і відображає статус.
      */
-    private void loadFromFile() {
+    void loadFromFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
@@ -139,7 +139,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Зберігає дані у файл і відображає статус.
      */
-    private void saveToFile() {
+    void saveToFile() {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
@@ -155,7 +155,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Відкриває діалогове вікно для додавання нової збірки.
      */
-    private void addCompilation() {
+    void addCompilation() {
         DialogFactory.showAddCompilationDialog(this, discManager, listModel, statusBar);
     }
 
@@ -186,7 +186,7 @@ public class MusicAppGUI extends JFrame {
     /**
      * Оновлює список збірок у моделі та пошуковій панелі.
      */
-    private void refreshCompilationList() {
+    void refreshCompilationList() {
         listModel.clear();
         discManager.getCompilations().forEach(listModel::addElement);
         if (searchPanel != null) {
@@ -200,7 +200,7 @@ public class MusicAppGUI extends JFrame {
      * @param title   заголовок помилки
      * @param message текст помилки
      */
-    private void showError(String title, String message) {
+    void showError(String title, String message) {
         statusBar.setText(" Помилка: " + message);
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
     }
