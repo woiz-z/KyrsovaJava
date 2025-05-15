@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -133,13 +134,16 @@ public class TrackDatabaseManager {
                 tracks.add(trackListPanel.getTrackListModel().get(i));
             }
 
-            tracks.sort((t1, t2) -> t1.getGenre().compareTo(t2.getGenre()));
+            // ВИПРАВЛЕННЯ: Сортування за назвою жанру (якщо MusicGenre має метод toString() або getName())
+            // Або за порядковим номером, якщо це очікувана поведінка.
+            // Для відповідності тесту, який очікує алфавітного порядку:
+            tracks.sort(Comparator.comparing(track -> track.getGenre().toString()));
 
             trackListPanel.getTrackListModel().clear();
             tracks.forEach(trackListPanel.getTrackListModel()::addElement);
 
             updateCompilationTracks(compilation, trackListPanel);
-            updateTracksInDatabase(trackListPanel.getParent(), compilation, trackListPanel);
+            updateTracksInDatabase((CompilationDetailsDialog) trackListPanel.getParent(), compilation, trackListPanel); // Приведення типу, якщо необхідно
 
             JOptionPane.showMessageDialog(trackListPanel.getParent(),
                     "Треки успішно відсортовані за жанром",
@@ -151,6 +155,7 @@ public class TrackDatabaseManager {
             throw new RuntimeException("Не вдалося відсортувати треки: " + ex.getMessage(), ex);
         }
     }
+
 
     /**
      * Оновлює внутрішній список треків компіляції, використовуючи дані з UI.

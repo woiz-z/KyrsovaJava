@@ -19,7 +19,7 @@ import java.awt.*;
  */
 public class CompilationDetailsDialog extends JDialog {
     private static final Logger logger = LogManager.getLogger(CompilationDetailsDialog.class);
-    public final MusicCompilation compilation;
+    public MusicCompilation compilation;
     private final DiscManager discManager;
     TrackListPanel trackListPanel; // Зберігаємо посилання на TrackListPanel
 
@@ -42,7 +42,6 @@ public class CompilationDetailsDialog extends JDialog {
      * Налаштовує розміри, розташування та додає компоненти до діалогового вікна.
      */
     private void initializeUI() {
-        try {
             setSize(1400, 750);
             setLocationRelativeTo(getParent());
             setResizable(true);
@@ -53,13 +52,8 @@ public class CompilationDetailsDialog extends JDialog {
             addHeaderPanel(mainPanel);
             addTrackListPanel(mainPanel);
             addButtonPanel(mainPanel);
-
             logger.debug("Інтерфейс для збірки {} успішно ініціалізовано", compilation.getTitle());
-        } catch (Exception e) {
-            logger.error("Помилка ініціалізації інтерфейсу для збірки {}: {}", compilation.getTitle(), e.getMessage(), e);
-            JOptionPane.showMessageDialog(this, "Виникла помилка при ініціалізації інтерфейсу.", "Помилка", JOptionPane.ERROR_MESSAGE);
-            throw new RuntimeException("Не вдалося ініціалізувати компоненти інтерфейсу", e);
-        }
+
     }
 
     /**

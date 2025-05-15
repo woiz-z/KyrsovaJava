@@ -242,7 +242,7 @@ public class TrackDialogs {
         dialog.setVisible(true);
     }
 
-    private static JPanel createDialogPanel(String title) {
+    static JPanel createDialogPanel(String title) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(new EmptyBorder(15, 15, 15, 15));
         panel.setBackground(PANEL_BACKGROUND);
@@ -254,14 +254,14 @@ public class TrackDialogs {
         return panel;
     }
 
-    private static JPanel createFieldsPanel() {
+    static JPanel createFieldsPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
         panel.setBorder(new EmptyBorder(10, 20, 10, 20));
         panel.setBackground(PANEL_BACKGROUND);
         return panel;
     }
 
-    private static JPanel createButtonPanel() {
+    static JPanel createButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         panel.setBorder(new EmptyBorder(15, 0, 0, 0));
         panel.setBackground(PANEL_BACKGROUND);

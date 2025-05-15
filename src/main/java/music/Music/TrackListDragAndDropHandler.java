@@ -28,7 +28,7 @@ public class TrackListDragAndDropHandler {
     private final DefaultListModel<MusicTrack> listModel;
     private final TrackListPanel trackListPanel;
     private final CompilationDetailsDialog parent;
-    private int dragSourceIndex;
+    int dragSourceIndex;
 
     /**
      * Конструктор обробника Drag-and-Drop.
@@ -91,7 +91,7 @@ public class TrackListDragAndDropHandler {
     /**
      * Обробка початку перетягування.
      */
-    private void handleDragEnter(DropTargetDragEvent dtde) {
+    void handleDragEnter(DropTargetDragEvent dtde) {
         if (dtde.isDataFlavorSupported(new DataFlavor(MusicTrack.class, "MusicTrack"))) {
             dtde.acceptDrag(DnDConstants.ACTION_MOVE);
         } else {
@@ -103,7 +103,7 @@ public class TrackListDragAndDropHandler {
     /**
      * Обробка перетягування над списком.
      */
-    private void handleDragOver(DropTargetDragEvent dtde) {
+    void handleDragOver(DropTargetDragEvent dtde) {
         Point location = dtde.getLocation();
         int index = trackList.locationToIndex(location);
 
@@ -117,14 +117,14 @@ public class TrackListDragAndDropHandler {
     /**
      * Обробка виходу з зони перетягування.
      */
-    private void handleDragExit() {
+    void handleDragExit() {
         trackList.clearSelection();
     }
 
     /**
      * Обробка скидання треку.
      */
-    private void handleDrop(DropTargetDropEvent dtde) {
+    void handleDrop(DropTargetDropEvent dtde) {
         DataFlavor trackFlavor = new DataFlavor(MusicTrack.class, "MusicTrack");
         if (!dtde.isDataFlavorSupported(trackFlavor)) {
             dtde.rejectDrop();
@@ -165,7 +165,7 @@ public class TrackListDragAndDropHandler {
     /**
      * Оновлення списку треків компіляції після переміщення.
      */
-    private void updateCompilationTracks() {
+    void updateCompilationTracks() {
         List<MusicTrack> updatedTracks = new ArrayList<>();
         for (int i = 0; i < listModel.getSize(); i++) {
             updatedTracks.add(listModel.get(i));
@@ -189,7 +189,7 @@ public class TrackListDragAndDropHandler {
     /**
      * Внутрішній клас для обробки передачі даних при Drag-and-Drop.
      */
-    private class TrackTransferHandler extends TransferHandler {
+    class TrackTransferHandler extends TransferHandler {
         private final DataFlavor trackFlavor = new DataFlavor(MusicTrack.class, "MusicTrack");
 
         @Override
@@ -210,7 +210,7 @@ public class TrackListDragAndDropHandler {
     /**
      * Внутрішній клас для створення об'єкта передачі даних треку.
      */
-    private class TrackTransferable implements Transferable {
+    class TrackTransferable implements Transferable {
         private final MusicTrack track;
         private final DataFlavor trackFlavor = new DataFlavor(MusicTrack.class, "MusicTrack");
 

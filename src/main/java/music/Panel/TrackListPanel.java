@@ -31,7 +31,7 @@ public class TrackListPanel {
     List<MusicTrack> allTracks;
     private final TrackSearchPanel searchPanel;
     private final CompilationDetailsDialog parent;
-    public final MusicCompilation compilation;
+    public MusicCompilation compilation;
 
     /**
      * Конструктор панелі списку треків.

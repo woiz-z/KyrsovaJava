@@ -49,7 +49,7 @@ public class StatisticsDialog extends JDialog {
     /**
      * Ініціалізація користувацького інтерфейсу діалогового вікна.
      */
-    private void initializeUI() {
+    void initializeUI() {
         configureWindowProperties();
         JPanel mainPanel = createMainPanel();
         add(mainPanel);
@@ -61,7 +61,7 @@ public class StatisticsDialog extends JDialog {
         setResizable(true);
     }
 
-    private JPanel createMainPanel() {
+    JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10)) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -91,7 +91,7 @@ public class StatisticsDialog extends JDialog {
     // Компоненти головного інтерфейсу
     // ---------------------------------------------------------------------------------------------
 
-    private JPanel createHeaderPanel() {
+    JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         headerPanel.setOpaque(false);
@@ -105,7 +105,7 @@ public class StatisticsDialog extends JDialog {
         return headerPanel;
     }
 
-    private JLabel createTitleLabel() {
+    JLabel createTitleLabel() {
         JLabel label = new JLabel("Статистика збірки: " + compilation.getTitle()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -129,7 +129,7 @@ public class StatisticsDialog extends JDialog {
         return label;
     }
 
-    private JLabel createInfoLabel() {
+    JLabel createInfoLabel() {
         JLabel label = new JLabel(String.format(
                 "%d треків • %d хв %d сек",
                 compilation.getTracks().size(),
@@ -142,7 +142,7 @@ public class StatisticsDialog extends JDialog {
         return label;
     }
 
-    private JTabbedPane createTabbedPane() {
+    JTabbedPane createTabbedPane() {
         tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         tabbedPane.setOpaque(false);
@@ -173,7 +173,7 @@ public class StatisticsDialog extends JDialog {
     // Вкладки статистики
     // ---------------------------------------------------------------------------------------------
 
-    private void addDurationTab() {
+    void addDurationTab() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -200,7 +200,7 @@ public class StatisticsDialog extends JDialog {
         tabbedPane.addTab("Тривалість", panel);
     }
 
-    private JPanel createDurationStatsPanel(Duration total, Duration avg, Duration shortest, Duration longest) {
+    JPanel createDurationStatsPanel(Duration total, Duration avg, Duration shortest, Duration longest) {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
@@ -217,7 +217,7 @@ public class StatisticsDialog extends JDialog {
         return panel;
     }
 
-    private void addGenreTab() {
+    void addGenreTab() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -242,7 +242,7 @@ public class StatisticsDialog extends JDialog {
         tabbedPane.addTab("Жанри", panel);
     }
 
-    private JPanel createGenreStatsPanel(List<Map.Entry<MusicGenre, Long>> genres) {
+    JPanel createGenreStatsPanel(List<Map.Entry<MusicGenre, Long>> genres) {
         JPanel panel = new JPanel(new GridLayout(genres.size() + 1, 2, 10, 5));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
@@ -258,7 +258,7 @@ public class StatisticsDialog extends JDialog {
         return panel;
     }
 
-    private void addArtistTab() {
+    void addArtistTab() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -286,7 +286,7 @@ public class StatisticsDialog extends JDialog {
         tabbedPane.addTab("Виконавці", panel);
     }
 
-    private JPanel createArtistStatsPanel(List<Map.Entry<String, Long>> artists) {
+    JPanel createArtistStatsPanel(List<Map.Entry<String, Long>> artists) {
         JPanel panel = new JPanel(new GridLayout(artists.size() + 1, 2, 10, 5));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
@@ -306,7 +306,7 @@ public class StatisticsDialog extends JDialog {
     // Методи для створення діаграм
     // ---------------------------------------------------------------------------------------------
 
-    private JPanel createDurationHistogram(List<MusicTrack> tracks) {
+    JPanel createDurationHistogram(List<MusicTrack> tracks) {
         return new HistogramPanel(tracks) {
             @Override
             protected void drawData(Graphics2D g2d, int width, int height, int padding, int chartWidth, int chartHeight) {
@@ -373,7 +373,7 @@ public class StatisticsDialog extends JDialog {
         };
     }
 
-    private JPanel createGenreChart(List<Map.Entry<MusicGenre, Long>> genres) {
+    JPanel createGenreChart(List<Map.Entry<MusicGenre, Long>> genres) {
         return new BarChartPanel(genres) {
             @Override
             protected void drawBars(Graphics2D g2d, int x, int height, int padding, int chartHeight, long maxCount) {
