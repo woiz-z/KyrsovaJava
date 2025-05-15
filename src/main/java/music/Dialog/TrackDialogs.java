@@ -20,8 +20,8 @@ import java.time.Duration;
  */
 public class TrackDialogs {
     private static final Logger logger = LogManager.getLogger(TrackDialogs.class);
-    private static final Color PANEL_BACKGROUND = new Color(245, 248, 250);
-    private static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    static final Color PANEL_BACKGROUND = new Color(245, 248, 250);
+    static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 18);
     private static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 14);
 
@@ -285,7 +285,7 @@ public class TrackDialogs {
         return label;
     }
 
-    private static JTextField createStyledTextField() {
+    static JTextField createStyledTextField() {
         JTextField field = new JTextField();
         field.setFont(LABEL_FONT);
         field.setBorder(BorderFactory.createCompoundBorder(
@@ -294,13 +294,13 @@ public class TrackDialogs {
         return field;
     }
 
-    private static JTextField createStyledTextField(String text) {
+    static JTextField createStyledTextField(String text) {
         JTextField field = createStyledTextField();
         field.setText(text);
         return field;
     }
 
-    private static <T> JComboBox<T> createStyledComboBox(T[] items) {
+    static <T> JComboBox<T> createStyledComboBox(T[] items) {
         JComboBox<T> comboBox = new JComboBox<>(items);
         comboBox.setFont(LABEL_FONT);
         comboBox.setBorder(BorderFactory.createCompoundBorder(
@@ -318,7 +318,7 @@ public class TrackDialogs {
         return comboBox;
     }
 
-    private static JSpinner createStyledSpinner(int min, int max, int value) {
+    static JSpinner createStyledSpinner(int min, int max, int value) {
         SpinnerNumberModel model = new SpinnerNumberModel(value, min, max, 1);
         JSpinner spinner = new JSpinner(model);
         spinner.setFont(LABEL_FONT);
@@ -334,7 +334,7 @@ public class TrackDialogs {
         return spinner;
     }
 
-    private static JButton createDialogButton(String text, Color color) {
+    static JButton createDialogButton(String text, Color color) {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -364,9 +364,9 @@ public class TrackDialogs {
         return button;
     }
 
-    private static void addFieldComponents(JPanel panel, JTextField titleField, JTextField artistField,
-                                           JComboBox<MusicGenre> genreCombo, JSpinner minutesSpinner,
-                                           JSpinner secondsSpinner) {
+    static void addFieldComponents(JPanel panel, JTextField titleField, JTextField artistField,
+                                   JComboBox<MusicGenre> genreCombo, JSpinner minutesSpinner,
+                                   JSpinner secondsSpinner) {
         panel.add(createFormLabel("Назва треку:"));
         panel.add(titleField);
         panel.add(createFormLabel("Виконавець:"));
@@ -379,11 +379,11 @@ public class TrackDialogs {
         panel.add(secondsSpinner);
     }
 
-    private static void showErrorMessage(JDialog dialog, String message) {
+    static void showErrorMessage(JDialog dialog, String message) {
         JOptionPane.showMessageDialog(dialog, message, "Помилка", JOptionPane.ERROR_MESSAGE);
     }
 
-    private static HeaderPanel getHeaderPanel(CompilationDetailsDialog parent) {
+    static HeaderPanel getHeaderPanel(CompilationDetailsDialog parent) {
         try {
             JPanel mainPanel = (JPanel) parent.getContentPane().getComponent(0);
             return new HeaderPanel(parent.compilation);

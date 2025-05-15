@@ -55,7 +55,7 @@ public class StatisticsDialog extends JDialog {
         add(mainPanel);
     }
 
-    private void configureWindowProperties() {
+    void configureWindowProperties() {
         setSize(1400, 900);
         setLocationRelativeTo(getParent());
         setResizable(true);
@@ -159,7 +159,7 @@ public class StatisticsDialog extends JDialog {
         return tabbedPane;
     }
 
-    private JPanel createButtonPanel() {
+    JPanel createButtonPanel() {
         JButton closeButton = createModernButton("Закрити", new Color(120, 120, 120));
         closeButton.addActionListener(e -> dispose());
 

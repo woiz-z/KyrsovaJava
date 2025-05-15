@@ -261,4 +261,68 @@ class TrackListPanelTest {
         }
     }
 
+    @Test
+    void testShowTrackDetailsWithException() {
+        try (MockedStatic<JOptionPane> mocked = Mockito.mockStatic(JOptionPane.class)) {
+            MusicTrack track = new MusicTrack("Test Track", "Test Artist", MusicGenre.JAZZ, Duration.ofMinutes(4));
+
+            // Симулюємо виняток при створенні діалогу
+            when(parentDialog.getParent()).thenThrow(new RuntimeException("Test exception"));
+
+            trackListPanel.showTrackDetails(track);
+
+            // Перевіряємо, що було показано повідомлення про помилку
+            mocked.verify(() -> JOptionPane.showMessageDialog(
+                    eq(parentDialog),
+                    eq("Не вдалося відкрити деталі треку"),
+                    eq("Помилка"),
+                    eq(JOptionPane.ERROR_MESSAGE)
+            ));
+        }
+    }
+
+
+
+    @Test
+    void testResetFilterWithEmptyTracks() {
+        trackListPanel.allTracks = new ArrayList<>();
+
+        try (MockedStatic<JOptionPane> mocked = Mockito.mockStatic(JOptionPane.class)) {
+            trackListPanel.resetFilter(headerPanel);
+
+            // Перевіряємо, що було залоговано попередження
+            verify(headerPanel, never()).updateInfo(anyInt(), anyLong(), anyLong());
+        }
+    }
+
+
+
+    @Test
+    void testMouseClickWithNullSelectedValue() {
+        JList<MusicTrack> trackList = trackListPanel.getTrackList();
+
+        // Симулюємо клік, коли нічого не вибрано
+        trackList.clearSelection();
+        for (MouseListener listener : trackList.getMouseListeners()) {
+            listener.mouseClicked(new MouseEvent(trackList, MouseEvent.MOUSE_CLICKED,
+                    System.currentTimeMillis(), 0, 0, 0, 2, false));
+        }
+
+        // Перевіряємо, що не було винятків
+        assertTrue(true);
+    }
+
+    @Test
+    void testConstructorWithInitializationException() {
+        // Створюємо mock компіляції, яка кидатиме виняток при отриманні треків
+        MusicCompilation mockCompilation = mock(MusicCompilation.class);
+        when(mockCompilation.getTracks()).thenThrow(new RuntimeException("Test exception"));
+
+        assertThrows(RuntimeException.class, () -> {
+            new TrackListPanel(parentDialog, mockCompilation);
+        });
+    }
+
+
+
 }

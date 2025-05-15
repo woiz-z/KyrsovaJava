@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
  * Забезпечує функціонал для редагування та видалення компіляцій через контекстне меню.
  */
 public class ContextMenuFactory {
-    private static final Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    static final Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Logger logger = LogManager.getLogger(ContextMenuFactory.class);
 
     /**
@@ -39,7 +39,7 @@ public class ContextMenuFactory {
      * @param contextMenu Контекстне меню, до якого додаються пункти.
      * @param compilationList Список компіляцій, для якого налаштовуються дії.
      */
-    private static void configureMenuItems(JPopupMenu contextMenu, JList<MusicCompilation> compilationList) {
+    static void configureMenuItems(JPopupMenu contextMenu, JList<MusicCompilation> compilationList) {
         JMenuItem editItem = createMenuItem("Змінити назву", e -> {
             logger.info("Вибрано пункт 'Змінити назву'");
             executeAction(compilationList, MusicAppGUI::renameCompilation, "перейменування");
@@ -76,9 +76,9 @@ public class ContextMenuFactory {
      * @param action Дія, яка виконується (редагування або видалення).
      * @param actionName Назва дії для логування.
      */
-    private static void executeAction(JList<MusicCompilation> compilationList,
-                                      Consumer<MusicAppGUI> action,
-                                      String actionName) {
+    static void executeAction(JList<MusicCompilation> compilationList,
+                              Consumer<MusicAppGUI> action,
+                              String actionName) {
         try {
             MusicAppGUI app = (MusicAppGUI) SwingUtilities.getAncestorOfClass(MusicAppGUI.class, compilationList);
             if (app != null) {
@@ -98,7 +98,7 @@ public class ContextMenuFactory {
      * @param compilationList Список компіляцій.
      * @param contextMenu Контекстне меню для відображення.
      */
-    private static void addMouseListener(JList<MusicCompilation> compilationList, JPopupMenu contextMenu) {
+    static void addMouseListener(JList<MusicCompilation> compilationList, JPopupMenu contextMenu) {
         compilationList.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -127,7 +127,7 @@ public class ContextMenuFactory {
      * Функціональний інтерфейс для виконання дій з MusicAppGUI.
      */
     @FunctionalInterface
-    private interface Consumer<T> {
+    interface Consumer<T> {
         void accept(T t);
     }
 }
