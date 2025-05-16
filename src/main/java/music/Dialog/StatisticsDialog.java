@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class StatisticsDialog extends JDialog {
     private static final Logger logger = LogManager.getLogger(StatisticsDialog.class);
     private final MusicCompilation compilation;
-    private JTabbedPane tabbedPane;
+    JTabbedPane tabbedPane;
 
     /**
      * Конструктор діалогового вікна статистики.
@@ -420,7 +420,7 @@ public class StatisticsDialog extends JDialog {
         };
     }
 
-    private JPanel createArtistChart(List<Map.Entry<String, Long>> artists) {
+    JPanel createArtistChart(List<Map.Entry<String, Long>> artists) {
         return new BarChartPanel(artists) {
             @Override
             protected void drawBars(Graphics2D g2d, int x, int height, int padding, int chartHeight, long maxCount) {
@@ -478,11 +478,11 @@ public class StatisticsDialog extends JDialog {
     // Допоміжні методи
     // ---------------------------------------------------------------------------------------------
 
-    private JLabel createStatLabel(String text) {
+    JLabel createStatLabel(String text) {
         return createStatLabel(text, false);
     }
 
-    private JLabel createStatLabel(String text, boolean isHeader) {
+    JLabel createStatLabel(String text, boolean isHeader) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", isHeader ? Font.BOLD : Font.PLAIN, 14));
         label.setForeground(isHeader ? new Color(70, 70, 70) : new Color(50, 50, 50));
@@ -490,7 +490,7 @@ public class StatisticsDialog extends JDialog {
         return label;
     }
 
-    private JLabel createStatValue(String text) {
+    JLabel createStatValue(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 14));
         label.setForeground(new Color(70, 130, 180));
@@ -498,13 +498,13 @@ public class StatisticsDialog extends JDialog {
         return label;
     }
 
-    private String formatDuration(Duration duration) {
+    String formatDuration(Duration duration) {
         return String.format("%d хв %02d сек",
                 duration.toMinutes(),
                 duration.getSeconds() % 60);
     }
 
-    private JButton createModernButton(String text, Color color) {
+    JButton createModernButton(String text, Color color) {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -544,7 +544,7 @@ public class StatisticsDialog extends JDialog {
     // Абстрактні класи для діаграм
     // ---------------------------------------------------------------------------------------------
 
-    private abstract class HistogramPanel extends JPanel {
+    abstract class HistogramPanel extends JPanel {
         protected final List<MusicTrack> tracks;
 
         public HistogramPanel(List<MusicTrack> tracks) {
@@ -589,7 +589,7 @@ public class StatisticsDialog extends JDialog {
         protected abstract long getMaxValue();
     }
 
-    private abstract class BarChartPanel extends JPanel {
+    abstract class BarChartPanel extends JPanel {
         protected int barWidth;
         protected final List<? extends Map.Entry<?, Long>> entries;
 
