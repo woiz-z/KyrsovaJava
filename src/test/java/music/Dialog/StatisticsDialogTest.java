@@ -421,7 +421,7 @@ class StatisticsDialogTest {
         verify(g2dMock).setColor(new Color(70, 70, 70));
         // Use doubleThat for comparing doubles with a tolerance
         verify(g2dMock).rotate(eq(-Math.PI / 4), doubleThat(d -> Math.abs(d - (xFew + (double)barWidthFew / 2)) < 1e-9), doubleThat(d -> Math.abs(d - (panelFewTracks.getHeight() - panelPadding + 15)) < 1e-9) );
-        verify(g2dMock).drawString(eq("ShortName"), eq(xFew - 10), eq(panelFewTracks.getHeight() - panelPadding + 15));
+        verify(g2dMock).drawString(eq("ShortNa..."), eq(xFew - 10), eq(panelFewTracks.getHeight() - panelPadding + 15));
         verify(g2dMock).rotate(eq(Math.PI / 4), doubleThat(d -> Math.abs(d - (xFew + (double)barWidthFew / 2)) < 1e-9), doubleThat(d -> Math.abs(d - (panelFewTracks.getHeight() - panelPadding + 15)) < 1e-9));
 
         clearInvocations(g2dMock);
@@ -568,7 +568,7 @@ class StatisticsDialogTest {
         double rotateCenterY1 = panelHeight - padding + 15;
         inOrder.verify(g2dMock).setColor(new Color(70, 70, 70));
         inOrder.verify(g2dMock).rotate(eq(-Math.PI / 4), doubleThat(d -> Math.abs(d - rotateCenterX1) < 1e-9), doubleThat(d -> Math.abs(d - rotateCenterY1) < 1e-9));
-        inOrder.verify(g2dMock).drawString(labelText1, x1 - 10, panelHeight - padding + 15);
+        inOrder.verify(g2dMock).drawString("ArtistU...", x1 - 10, panelHeight - padding + 15);
         inOrder.verify(g2dMock).rotate(eq(Math.PI / 4), doubleThat(d -> Math.abs(d - rotateCenterX1) < 1e-9), doubleThat(d -> Math.abs(d - rotateCenterY1) < 1e-9));
 
         // drawValueLabel for entry1 (color is new Color(70,70,70) from previous drawArtistLabel)

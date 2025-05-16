@@ -344,7 +344,7 @@ public class StatisticsDialog extends JDialog {
             }
 
             private void drawTrackLabel(Graphics2D g2d, MusicTrack track, int x, int height, int padding, int barWidth) {
-                String title = track.getTitle().length() > 10 ?
+                String title = track.getTitle().length() > 8 ?
                         track.getTitle().substring(0, 7) + "..." : track.getTitle();
                 g2d.setColor(new Color(70, 70, 70));
                 g2d.rotate(-Math.PI / 4, x + barWidth / 2, height - padding + 15);
@@ -460,7 +460,7 @@ public class StatisticsDialog extends JDialog {
             private void drawArtistLabel(Graphics2D g2d, Map.Entry<String, Long> entry,
                                          int x, int height, int padding) {
                 String artist = entry.getKey();
-                if (artist.length() > 10) artist = artist.substring(0, 7) + "...";
+                if (artist.length() > 8) artist = artist.substring(0, 7) + "...";
                 g2d.setColor(new Color(70, 70, 70));
                 g2d.rotate(-Math.PI / 4, x + barWidth / 2, height - padding + 15);
                 g2d.drawString(artist, x - 10, height - padding + 15);
