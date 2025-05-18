@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Клас для обробки Drag-and-Drop функціоналу списку треків у музичній компіляції.
+ * Клас для обробки Drag-and-Drop функціоналу списку треків у музичній збірці.
  * Забезпечує можливість перетягування треків для зміни їх порядку в списку.
  */
 public class TrackListDragAndDropHandler {

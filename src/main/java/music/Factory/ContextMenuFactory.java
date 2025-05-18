@@ -11,18 +11,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Клас для створення контекстного меню для списку музичних компіляцій.
- * Забезпечує функціонал для редагування та видалення компіляцій через контекстне меню.
+ * Клас для створення контекстного меню для списку музичних збірок.
+ * Забезпечує функціонал для редагування та видалення збірок через контекстне меню.
  */
 public class ContextMenuFactory {
     static final Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Logger logger = LogManager.getLogger(ContextMenuFactory.class);
 
     /**
-     * Створює та налаштовує контекстне меню для списку компіляцій.
-     * Додає пункти меню для редагування та видалення компіляцій, а також обробник подій для відображення меню.
+     * Створює та налаштовує контекстне меню для списку збірок.
+     * Додає пункти меню для редагування та видалення збірок, а також обробник подій для відображення меню.
      *
-     * @param compilationList Список компіляцій, для якого створюється контекстне меню.
+     * @param compilationList Список збірок, для якого створюється контекстне меню.
      */
     public static void createContextMenu(JList<MusicCompilation> compilationList) {
         JPopupMenu contextMenu = new JPopupMenu();
@@ -30,11 +30,11 @@ public class ContextMenuFactory {
         configureMenuItems(contextMenu, compilationList);
         addMouseListener(compilationList, contextMenu);
 
-        logger.info("Контекстне меню успішно створено та додано до списку компіляцій");
+        logger.info("Контекстне меню успішно створено та додано до списку збірок");
     }
 
     /**
-     * Налаштовує пункти контекстного меню для редагування та видалення компіляцій.
+     * Налаштовує пункти контекстного меню для редагування та видалення збірок.
      *
      * @param contextMenu Контекстне меню, до якого додаються пункти.
      * @param compilationList Список компіляцій, для якого налаштовуються дії.
@@ -70,9 +70,9 @@ public class ContextMenuFactory {
     }
 
     /**
-     * Виконує дію для компіляції, отримуючи екземпляр MusicAppGUI.
+     * Виконує дію для збірок, отримуючи екземпляр MusicAppGUI.
      *
-     * @param compilationList Список компіляцій.
+     * @param compilationList Список збірок.
      * @param action Дія, яка виконується (редагування або видалення).
      * @param actionName Назва дії для логування.
      */

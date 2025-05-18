@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Клас MusicCompilation представляє компіляцію музичних треків.
+ * Клас MusicCompilation представляє збірку музичних треків.
  * Дозволяє керувати списком треків, обчислювати загальну тривалість,
  * сортувати треки за жанром та шукати треки за діапазоном тривалості.
  * Реалізує інтерфейс Serializable для можливості серіалізації.
@@ -23,7 +23,7 @@ public class MusicCompilation implements Serializable {
     private final List<MusicTrack> tracks; // Список треків
 
     /**
-     * Конструктор для створення нової компіляції з назвою.
+     * Конструктор для створення нової збірки з назвою.
      *
      * @param title Назва компіляції, не може бути null або порожньою.
      * @throws IllegalArgumentException якщо назва порожня або null.
@@ -38,16 +38,16 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Отримує ідентифікатор компіляції.
+     * Отримує ідентифікатор збірки.
      *
-     * @return Ідентифікатор компіляції або null, якщо не встановлено.
+     * @return Ідентифікатор збірки або null, якщо не встановлено.
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Встановлює ідентифікатор компіляції.
+     * Встановлює ідентифікатор збірки.
      *
      * @param id Ідентифікатор, не може бути від'ємним.
      * @throws IllegalArgumentException якщо id від'ємний.
@@ -61,16 +61,16 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Отримує назву компіляції.
+     * Отримує назву збірки.
      *
-     * @return Назва компіляції.
+     * @return Назва збірки.
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Встановлює нову назву компіляції.
+     * Встановлює нову назву збірки.
      *
      * @param title Нова назва, не може бути null або порожньою.
      * @throws IllegalArgumentException якщо назва порожня або null.
@@ -84,7 +84,7 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Отримує копію списку треків компіляції.
+     * Отримує копію списку треків збірки.
      *
      * @return Новий список треків.
      */
@@ -93,7 +93,7 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Додає трек до компіляції.
+     * Додає трек до збірки.
      *
      * @param track Музичний трек, не може бути null.
      * @throws IllegalArgumentException якщо трек null.
@@ -107,9 +107,9 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Обчислює загальну тривалість усіх треків у компіляції.
+     * Обчислює загальну тривалість усіх треків у збірки.
      *
-     * @return Загальна тривалість компіляції.
+     * @return Загальна тривалість збірки.
      * @throws RuntimeException якщо сталася помилка під час обчислення.
      */
     public Duration calculateTotalDuration() {
@@ -122,7 +122,7 @@ public class MusicCompilation implements Serializable {
     }
 
     /**
-     * Сортує треки в компіляції за жанром.
+     * Сортує треки в збірки за жанром.
      *
      * @throws RuntimeException якщо сталася помилка під час сортування.
      */

@@ -13,7 +13,7 @@ import java.awt.*;
 import java.util.Arrays;
 
 /**
- * Панель із кнопками для керування треками в діалоговому вікні компіляції.
+ * Панель із кнопками для керування треками в діалоговому вікні збірок.
  * Забезпечує функціонал додавання, редагування, видалення треків, сортування, фільтрації та відображення статистики.
  */
 public class ButtonPanel {
@@ -113,7 +113,7 @@ public class ButtonPanel {
     }
 
     /**
-     * Відображає діалогове вікно зі статистикою компіляції.
+     * Відображає діалогове вікно зі статистикою збірок.
      */
     void showStatistics() {
         StatisticsDialog dialog = new StatisticsDialog((JFrame) parent.getParent(), compilation);
