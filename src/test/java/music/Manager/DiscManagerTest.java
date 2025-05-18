@@ -33,7 +33,7 @@ class DiscManagerTest {
         discManager = new DiscManager();
         compilation = new MusicCompilation("Test Compilation");
 
-        // Mock database components
+
         mockedDatabaseConfig = Mockito.mockStatic(DatabaseConfig.class);
         mockConnection = mock(Connection.class);
         mockPreparedStatement = mock(PreparedStatement.class);
@@ -68,7 +68,7 @@ class DiscManagerTest {
         when(mockConnection.prepareStatement(anyString(), anyInt())).thenThrow(new SQLException("Database error"));
 
         discManager.addCompilation(compilation);
-        // Verify no exception is thrown and compilation is still added to local list
+
         assertEquals(13, discManager.getCompilations().size());
     }
 
@@ -178,7 +178,7 @@ class DiscManagerTest {
 
         discManager.updateCompilationTitle(compilation, "New Title");
 
-        assertEquals("New Title", compilation.getTitle()); // Local update should still happen
+        assertEquals("New Title", compilation.getTitle());
     }
 
     @Test
@@ -190,7 +190,7 @@ class DiscManagerTest {
 
         File file = new File(filePath);
         assertTrue(file.exists());
-        file.delete(); // Clean up
+        file.delete();
     }
 
     @Test
@@ -206,13 +206,13 @@ class DiscManagerTest {
     void testLoadFromFileWithException() {
         assertThrows(IOException.class, () -> discManager.loadFromFile("nonexistent_file.dat"));
         assertThrows(ClassCastException.class, () -> {
-            // Create a file with invalid content
+
             String filePath = "invalid_content.dat";
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
                 oos.writeObject("Invalid content");
             }
             discManager.loadFromFile(filePath);
-            new File(filePath).delete(); // Clean up
+            new File(filePath).delete();
         });
     }
 
@@ -221,12 +221,11 @@ class DiscManagerTest {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
         when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
 
-        // Mock compilation result
+
         when(mockResultSet.next()).thenReturn(true, false);
         when(mockResultSet.getLong("id")).thenReturn(1L);
         when(mockResultSet.getString("title")).thenReturn("DB Compilation");
 
-        // Mock tracks result
         PreparedStatement mockTrackStatement = mock(PreparedStatement.class);
         ResultSet mockTrackResult = mock(ResultSet.class);
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockTrackStatement);
@@ -258,7 +257,7 @@ class DiscManagerTest {
     void testLoadFromDatabaseSilently() throws SQLException {
         when(mockConnection.createStatement()).thenThrow(new SQLException("Database error"));
 
-        // Should not throw exception
+
         DiscManager manager = new DiscManager();
         assertEquals(0, manager.getCompilations().size());
     }
@@ -271,7 +270,7 @@ class DiscManagerTest {
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getLong(1)).thenReturn(1L);
 
-        // Add track to compilation
+
         MusicTrack track = new MusicTrack("Test Track", "Test Artist", MusicGenre.ROCK, Duration.ofMinutes(3));
         compilation.addTrack(track);
 
@@ -287,7 +286,7 @@ class DiscManagerTest {
 
         discManager.deleteCompilationFromDatabase(1L);
 
-        verify(mockPreparedStatement, times(2)).executeUpdate(); // Once for tracks, once for compilation
+        verify(mockPreparedStatement, times(2)).executeUpdate();
     }
 
     @Test
@@ -307,6 +306,6 @@ class DiscManagerTest {
         List<MusicCompilation> result = discManager.getCompilations();
 
         assertEquals(13, result.size());
-        assertNotSame(discManager.getCompilations(), discManager.getCompilations()); // Should return new copy
+        assertNotSame(discManager.getCompilations(), discManager.getCompilations());
     }
 }

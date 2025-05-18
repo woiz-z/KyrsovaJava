@@ -65,13 +65,13 @@ class CompilationListPanelTest {
 
     @Test
     void mouseClicked_DoubleClickWithSelection_ShouldTriggerDetailsAction() {
-        // Arrange
+
         JList<MusicCompilation> list = CompilationListPanel.initializeCompilationList(listModel, detailsAction);
         MusicCompilation mockCompilation = mock(MusicCompilation.class);
         listModel.addElement(mockCompilation);
         list.setSelectedIndex(0);
 
-        // Act
+
         MouseEvent doubleClickEvent = new MouseEvent(
                 list, MouseEvent.MOUSE_CLICKED,
                 System.currentTimeMillis(), 0, 0, 0, 2, false
@@ -80,19 +80,17 @@ class CompilationListPanelTest {
             listener.mouseClicked(doubleClickEvent);
         }
 
-        // Assert
+
         verify(detailsAction, times(1)).accept(mockCompilation);
         verify(mockCompilation, times(1)).getName();
     }
 
     @Test
     void mouseClicked_DoubleClickWithoutSelection_ShouldLogWarning() {
-        // Arrange
+
         JList<MusicCompilation> list = CompilationListPanel.initializeCompilationList(listModel, detailsAction);
         Logger logger = mock(Logger.class);
-        // Необхідно використати Reflection для підміни логера, якщо це можливо
 
-        // Act
         MouseEvent doubleClickEvent = new MouseEvent(
                 list, MouseEvent.MOUSE_CLICKED,
                 System.currentTimeMillis(), 0, 0, 0, 2, false
@@ -101,9 +99,9 @@ class CompilationListPanelTest {
             listener.mouseClicked(doubleClickEvent);
         }
 
-        // Assert
+
         verify(detailsAction, never()).accept(any());
-        // Перевірка логування може вимагати додаткових інструментів, наприклад, Mockito для Log4j2
+
     }
 
     @Test
@@ -115,13 +113,13 @@ class CompilationListPanelTest {
 
     @Test
     void getCompilationList_ShouldReturnInitializedList() {
-        // Arrange
+
         JScrollPane scrollPane = CompilationListPanel.createScrollPane(listModel, detailsAction);
 
-        // Act
+
         JList<MusicCompilation> result = CompilationListPanel.getCompilationList();
 
-        // Assert
+
         assertNotNull(result);
         assertEquals(listModel, result.getModel());
         assertTrue(result.getCellRenderer() instanceof CompilationListRenderer);

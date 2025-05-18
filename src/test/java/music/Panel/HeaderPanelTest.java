@@ -46,7 +46,7 @@ class HeaderPanelTest {
         assertEquals(Font.BOLD, titleLabel.getFont().getStyle());
         assertEquals(24, titleLabel.getFont().getSize());
 
-        // Test with null compilation
+
         JLabel nullLabel = headerPanel.createTitleLabel(null);
         assertEquals("Без назви", nullLabel.getText());
     }
@@ -61,7 +61,7 @@ class HeaderPanelTest {
         assertEquals(5, infoLabel.getBorder().getBorderInsets(infoLabel).top);
         assertEquals(5, infoLabel.getBorder().getBorderInsets(infoLabel).left);
 
-        // Test with null compilation
+
         JLabel nullLabel = headerPanel.createInfoLabel(null);
         assertEquals("Немає даних компіляції", nullLabel.getText());
     }
@@ -72,7 +72,7 @@ class HeaderPanelTest {
         JLabel infoLabel = (JLabel) headerPanel.getPanel().getComponent(1);
         assertEquals("5 треків • 30 хв 45 сек", infoLabel.getText());
 
-        // Test edge cases
+
         headerPanel.updateInfo(0, 0, 0);
         assertEquals("0 треків • 0 хв 0 сек", infoLabel.getText());
 
@@ -102,11 +102,11 @@ class HeaderPanelTest {
         frame.pack();
         frame.setVisible(true);
 
-        // Verify the label is visible and has correct text
+
         assertTrue(titleLabel.isVisible());
         assertEquals("Test Compilation", titleLabel.getText());
 
-        // Test painting (this is mostly to ensure no exceptions are thrown)
+
         assertDoesNotThrow(() -> titleLabel.paint(titleLabel.getGraphics()));
 
         frame.dispose();
@@ -116,8 +116,8 @@ class HeaderPanelTest {
     void testPanelComponents() {
         JPanel panel = headerPanel.getPanel();
         assertEquals(2, panel.getComponentCount());
-        assertTrue(panel.getComponent(0) instanceof JLabel); // Title label
-        assertTrue(panel.getComponent(1) instanceof JLabel); // Info label
+        assertTrue(panel.getComponent(0) instanceof JLabel);
+        assertTrue(panel.getComponent(1) instanceof JLabel);
     }
 
     @Test

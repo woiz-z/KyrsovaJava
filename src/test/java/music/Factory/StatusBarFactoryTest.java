@@ -15,10 +15,10 @@ class StatusBarFactoryTest {
 
     @Test
     void createStatusBar_shouldReturnConfiguredJLabel() {
-        // Act
+
         JLabel statusBar = StatusBarFactory.createStatusBar();
 
-        // Assert
+
         assertNotNull(statusBar);
         assertEquals(" CREATED BY IHOR", statusBar.getText());
         assertEquals(new Font("Segoe UI", Font.PLAIN, 14), statusBar.getFont());
@@ -35,7 +35,7 @@ class StatusBarFactoryTest {
                     throw new RuntimeException("Simulated error during JLabel creation");
                 }))) {
 
-            // Act & Assert
+
             Exception exception = assertThrows(RuntimeException.class, () -> {
                 StatusBarFactory.createStatusBar();
             });
@@ -48,13 +48,13 @@ class StatusBarFactoryTest {
 
     @Test
     void configureStatusBar_shouldSetCorrectProperties() {
-        // Arrange
+
         JLabel testLabel = new JLabel();
 
-        // Act
+
         StatusBarFactory.configureStatusBar(testLabel);
 
-        // Assert
+
         assertNotNull(testLabel.getBorder());
         assertEquals(new Font("Segoe UI", Font.PLAIN, 14), testLabel.getFont());
         assertEquals(new Color(100, 100, 100), testLabel.getForeground());

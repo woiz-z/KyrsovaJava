@@ -32,15 +32,14 @@ class ButtonPanelTest {
 
     @Test
     void createButton_ShouldReturnStyledButton() {
-        // Arrange
+
         String text = "Test Button";
         Color color = Color.BLUE;
         ActionListener action = e -> {};
 
-        // Act
+
         JButton button = buttonPanel.createButton(text, color, action);
 
-        // Assert
         assertNotNull(button);
         assertEquals(text, button.getText());
         assertEquals(Color.WHITE, button.getForeground());
@@ -102,12 +101,12 @@ class ButtonPanelTest {
 
     @Test
     void createButton_ShouldHandleActionExceptions() {
-        // Arrange
+
         String text = "Test Button";
         Color color = Color.RED;
         ActionListener action = e -> { throw new RuntimeException("Test exception"); };
 
-        // Act & Assert (should not throw)
+
         JButton button = buttonPanel.createButton(text, color, action);
         assertDoesNotThrow(() -> button.getActionListeners()[0].actionPerformed(null));
     }
@@ -121,35 +120,35 @@ class ButtonPanelTest {
         verify(parent, times(1)).getParent();
         assertDoesNotThrow(() -> buttonPanel.showStatistics(), "Метод не повинен викидати винятки");
 
-        // Додаткові перевірки можна додати, якщо потрібно
+
     }
 
 
     @Test
     void getHeaderPanel_ShouldReturnHeaderPanelWhenSuccessful() {
-        // Arrange
+
         JPanel mainPanel = mock(JPanel.class);
         JComponent contentPane = mock(JComponent.class);
         when(parent.getContentPane()).thenReturn(contentPane);
         when(contentPane.getComponent(0)).thenReturn(mainPanel);
 
-        // Act
+
         HeaderPanel result = buttonPanel.getHeaderPanel();
 
-        // Assert
+
         assertNotNull(result);
     }
 
     @Test
     void getHeaderPanel_ShouldReturnNullAndLogErrorOnException() {
-        // Arrange
+
         when(parent.getContentPane()).thenThrow(new RuntimeException("Test exception"));
 
-        // Act
+
         HeaderPanel result = buttonPanel.getHeaderPanel();
 
-        // Assert
+
         assertNull(result);
-        // Можна додати перевірку логування, якщо є доступ до логера
+
     }
 }

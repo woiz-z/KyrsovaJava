@@ -7,8 +7,6 @@ import music.Music.MusicTrack;
 import music.Panel.HeaderPanel;
 import music.Panel.TrackListPanel;
 import org.apache.logging.log4j.LogManager;
-// Важливо: використовуйте повний шлях до org.apache.logging.log4j.Logger
-// import org.apache.logging.log4j.Logger; // Замість цього:
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,57 +52,33 @@ class TrackDialogsTest {
     private MockedStatic<TrackDialogs> mockTrackDialogsPartial;
 
     static class MockCompilationDetailsDialog extends CompilationDetailsDialog {
-        // Це поле буде використовуватися для встановлення поля compilation батьківського класу,
-        // якщо воно private. Якщо protected/public, то це поле не потрібне.
+
         public MusicCompilation capturedCompilation;
 
         public MockCompilationDetailsDialog(JFrame parent, MusicCompilation compilationArgument) {
-            // Передаємо компіляцію в батьківський клас.
-            // Якщо батьківський клас зберігає її в полі this.compilation, то все добре.
             super(parent, compilationArgument != null ? compilationArgument : new MusicCompilation("Default Mock Title For MockDialog"));
-            this.capturedCompilation = compilationArgument; // Зберігаємо для можливого використання
-
-            // Тепер перевіримо, чи батьківський клас має JPanel як перший компонент
-            // і чи його поле 'compilation' встановлене.
-            // Це необхідно для роботи TrackDialogs.getHeaderPanel
+            this.capturedCompilation = compilationArgument;
             if (super.getContentPane().getComponentCount() > 0) {
                 if (!(super.getContentPane().getComponent(0) instanceof JPanel)) {
-                    // Проблема: перший компонент не JPanel, getHeaderPanel впаде.
-                    // Створюємо "обгортку"
                     System.err.println("WARN: First component of MockCompilationDetailsDialog's contentPane is not JPanel. Wrapping.");
                     JPanel wrapperPane = new JPanel(new BorderLayout());
-                    JPanel actualFirstComponentPlaceholder = new JPanel(); // Це стане getComponent(0)
+                    JPanel actualFirstComponentPlaceholder = new JPanel();
                     wrapperPane.add(actualFirstComponentPlaceholder, BorderLayout.CENTER);
-                    // Копіюємо існуючі компоненти, якщо є
                     Component[] originalComponents = super.getContentPane().getComponents();
-                    // Видаляємо старі компоненти з оригінальної contentPane перед тим як її замінити
                     super.getContentPane().removeAll();
-                    // Додаємо компоненти в новий wrapperPane, можливо, в інші позиції
-                    // Це складно зробити універсально, не знаючи структури.
-                    // Простіше було б, якби getHeaderPanel був більш стійким.
-                    // Для простоти, поки що просто встановимо wrapperPane.
-                    // Це може зламати відображення діалогу, але для тестування getHeaderPanel може спрацювати.
-                    // setContentPane(wrapperPane); // Обережно з цим!
                 }
             } else {
-                // Проблема: немає компонентів, getHeaderPanel впаде.
                 System.err.println("WARN: MockCompilationDetailsDialog's contentPane has no components. Adding a placeholder JPanel.");
                 JPanel placeholderPane = new JPanel();
-                super.getContentPane().add(placeholderPane); // Додаємо JPanel, щоб getComponent(0) спрацювало
+                super.getContentPane().add(placeholderPane);
             }
 
-            // Встановлюємо поле compilation батьківського класу, якщо воно private,
-            // використовуючи рефлексію (не рекомендується, але можливо) або якщо є сеттер.
-            // Або, якщо `TrackDialogs.getHeaderPanel` використовує `parent.compilation`,
-            // то нам треба, щоб `mockParentDialog.compilation` було нашим `mockCompilation`.
-            // Якщо поле `compilation` в `CompilationDetailsDialog` є `protected` або `public`,
-            // то `mockParentDialog.compilation = mockCompilation;` в `setUp` має спрацювати.
         }
     }
 
     @BeforeEach
     void setUp() {
-        // ... (ініціалізація логера, інших моків)
+
         mockLogger = Mockito.mock(org.apache.logging.log4j.Logger.class);
         mockLogManager = Mockito.mockStatic(LogManager.class);
         mockLogManager.when(() -> LogManager.getLogger(any(Class.class))).thenReturn(mockLogger);
@@ -116,24 +90,8 @@ class TrackDialogsTest {
         mockTrackDatabaseManager = Mockito.mockStatic(TrackDatabaseManager.class);
         mockJOptionPane = Mockito.mockStatic(JOptionPane.class);
 
-        // Ініціалізуємо mockCompilation
-        // mockCompilation = Mockito.mock(MusicCompilation.class); // Це вже робить @Mock
         when(mockCompilation.getTitle()).thenReturn("Mocked Compilation Title");
-
-        // Створюємо екземпляр MockCompilationDetailsDialog
-        // Передаємо йому mockCompilation
         mockParentDialog = new MockCompilationDetailsDialog(null, mockCompilation);
-        // Тепер mockParentDialog.compilation (якщо поле protected/public в CompilationDetailsDialog)
-        // або mockParentDialog.capturedCompilation має містити mockCompilation.
-
-        // Якщо поле compilation в CompilationDetailsDialog є protected/public:
-        // Тоді `mockParentDialog.compilation` має бути екземпляром mockCompilation
-        // Якщо воно private, то `TrackDialogs.getHeaderPanel` (parent.compilation) отримає те,
-        // що було встановлено в конструкторі `CompilationDetailsDialog`.
-        // У цьому випадку, передача `mockCompilation` в конструктор `MockCompilationDetailsDialog`
-        // і далі в `super()` є ключовою.
-
-        // Мокуємо статичний метод getHeaderPanel
         mockTrackDialogsPartial = Mockito.mockStatic(TrackDialogs.class, Mockito.CALLS_REAL_METHODS);
         mockTrackDialogsPartial.when(() -> TrackDialogs.getHeaderPanel(any(CompilationDetailsDialog.class)))
                 .thenReturn(mockHeaderPanel);
@@ -960,7 +918,7 @@ class TrackDialogsTest {
 
 
 
-    // --- Helper methods for finding components ---
+
     private <T extends Component> T findComponent(Container container, Class<T> componentClass, int occurrence) {
         int count = 0;
         for (Component comp : getAllComponents(container)) {

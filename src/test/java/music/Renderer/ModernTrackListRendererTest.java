@@ -106,7 +106,7 @@ public class ModernTrackListRendererTest {
         assertEquals(5, border.getBorderInsets().bottom);
         assertEquals(10, border.getBorderInsets().right);
 
-        // Verify text
+
         String expectedText = "<html><div style='padding:5px;'>" +
                 "<b style='font-size:14px; color:#333;'>Test Title</b><br>" +
                 "<span style='color:#666; font-size:12px;'>Test Artist • <span style='color:#5e8c31;'>Rock</span> • 2:05</span>" +

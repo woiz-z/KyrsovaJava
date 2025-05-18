@@ -26,7 +26,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-// import java.util.stream.Collectors; // Не використовується, можна видалити
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,7 +79,7 @@ class TrackListDragAndDropHandlerTest {
         tracksField.set(mockCompilation, internalTrackList);
 
         handler = new TrackListDragAndDropHandler(trackList, listModel, trackListPanel, parent);
-        // Перевірка, що DropTarget було встановлено, відбувається в testConstructor
+
     }
 
     @AfterEach
@@ -102,7 +102,7 @@ class TrackListDragAndDropHandlerTest {
         assertNotNull(trackList.getTransferHandler());
         assertTrue(trackList.getMouseListeners().length > 0);
         assertNotNull(trackList.getDropTarget()); // Перевіряємо, що DropTarget встановлено
-        // Немає потреби перевіряти dropTargetListener окремо, якщо ми тестуємо методи handler
+
     }
 
     @Test
@@ -114,7 +114,7 @@ class TrackListDragAndDropHandlerTest {
 
         MouseListener foundListener = null;
         for (MouseListener listener : trackList.getMouseListeners()) {
-            // Шукаємо слухача, який є внутрішнім класом TrackListDragAndDropHandler
+
             if (listener.getClass().getName().startsWith(TrackListDragAndDropHandler.class.getName() + "$")) {
                 foundListener = listener;
                 break;
@@ -123,7 +123,7 @@ class TrackListDragAndDropHandlerTest {
         assertNotNull(foundListener, "MouseAdapter for dragSourceIndex not found");
         foundListener.mousePressed(mouseEvent);
 
-        assertEquals(1, handler.dragSourceIndex); // dragSourceIndex має бути package-private або мати геттер
+        assertEquals(1, handler.dragSourceIndex);
         verify(trackList, atLeastOnce()).locationToIndex(point);
     }
 
@@ -151,7 +151,7 @@ class TrackListDragAndDropHandlerTest {
 
     @Test
     void testHandleDragOver_SelectsAndScrolls() {
-        // **ВАЖЛИВО**: Метод handleDragOver має бути package-private в TrackListDragAndDropHandler.java
+
         DropTargetDragEvent event = mock(DropTargetDragEvent.class);
         Point location = new Point(10, 30);
         int targetIndex = 1;
@@ -172,7 +172,7 @@ class TrackListDragAndDropHandlerTest {
 
     @Test
     void testHandleDragOver_NoActionIfSameIndex() {
-        // **ВАЖЛИВО**: Метод handleDragOver має бути package-private в TrackListDragAndDropHandler.java
+
         DropTargetDragEvent event = mock(DropTargetDragEvent.class);
         Point location = new Point(10, 10);
         int targetIndex = 0;
@@ -189,9 +189,7 @@ class TrackListDragAndDropHandlerTest {
 
     @Test
     void testHandleDragExit_ClearsSelection() {
-        // **ВАЖЛИВО**: Метод handleDragExit має бути package-private в TrackListDragAndDropHandler.java
 
-        // Очищаємо попередні виклики, які могли статися під час setUp (наприклад, у setModel)
         Mockito.clearInvocations(trackList);
 
         handler.handleDragExit(); // Викликаємо метод напряму
@@ -244,7 +242,7 @@ class TrackListDragAndDropHandlerTest {
             assertEquals(testTrack1, trackCaptor.getValue());
 
             verify(trackList).setSelectedIndex(dropIndex);
-            // Перевірка виклику updateCompilationTracks() відбувається в її власному тесті
+
             tdbManager.verify(() -> TrackDatabaseManager.updateTracksInDatabase(parent, mockCompilation, trackListPanel));
             verify(event).dropComplete(true);
 
@@ -345,7 +343,7 @@ class TrackListDragAndDropHandlerTest {
 
     @Test
     void testHandleDrop_IOException() throws Exception {
-        // Немає потреби мокувати TrackDatabaseManager тут, бо до його виклику не дійде
+
         DropTargetDropEvent event = mock(DropTargetDropEvent.class);
         Transferable transferable = mock(Transferable.class);
         DataFlavor trackFlavor = new DataFlavor(MusicTrack.class, "MusicTrack");
@@ -367,13 +365,13 @@ class TrackListDragAndDropHandlerTest {
         verify(event).dropComplete(false);
         assertEquals(testTrack1, listModel.get(0));
         assertEquals(testTrack2, listModel.get(1));
-        verify(listModel, never()).remove(anyInt()); // Важливо: модель не має змінюватися при помилці
+        verify(listModel, never()).remove(anyInt());
         verify(listModel, never()).add(anyInt(), any(MusicTrack.class));
     }
 
     @Test
     void testUpdateCompilationTracks_SuccessfulUpdate() throws Exception {
-        // **ВАЖЛИВО**: Метод updateCompilationTracks має бути package-private
+
         listModel.clear();
         listModel.addElement(testTrack3);
         listModel.addElement(testTrack1);
@@ -403,7 +401,7 @@ class TrackListDragAndDropHandlerTest {
         faultyListModel.addElement(testTrack1);
         when(faultyListModel.get(anyInt())).thenThrow(new RuntimeException("Simulated error accessing list model"));
 
-        // Створюємо новий handler з цим "зіпсованим" listModel
+
         TrackListDragAndDropHandler faultyHandler = new TrackListDragAndDropHandler(trackList, faultyListModel, trackListPanel, parent);
 
         assertThrows(RuntimeException.class, faultyHandler::updateCompilationTracks);
@@ -471,7 +469,7 @@ class TrackListDragAndDropHandlerTest {
     @Test
     void testDropTargetListenerDropActionChanged() {
         DropTargetDragEvent event = mock(DropTargetDragEvent.class);
-        assertTrue(true, "dropActionChanged is an empty method in the anonymous DropTargetListener and not directly testable on the handler instance.");
+        assertTrue(true, "dropActionChanged is an empty method ");
     }
 
 

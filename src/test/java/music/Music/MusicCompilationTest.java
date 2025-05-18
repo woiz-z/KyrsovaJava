@@ -116,9 +116,9 @@ class MusicCompilationTest {
 
     @Test
     void sortByGenre_ShouldSortTracksByGenre() {
-        compilation.addTrack(track3); // Jazz
-        compilation.addTrack(track1); // Pop
-        compilation.addTrack(track2); // Rock
+        compilation.addTrack(track3);
+        compilation.addTrack(track1);
+        compilation.addTrack(track2);
 
         compilation.sortByGenre();
 
@@ -130,9 +130,9 @@ class MusicCompilationTest {
 
     @Test
     void findTracksByDurationRange_ShouldReturnTracksInRange() {
-        compilation.addTrack(track1); // 3 min
-        compilation.addTrack(track2); // 5 min
-        compilation.addTrack(track3); // 7 min
+        compilation.addTrack(track1);
+        compilation.addTrack(track2);
+        compilation.addTrack(track3);
 
         List<MusicTrack> result = compilation.findTracksByDurationRange(
                 Duration.ofMinutes(4),

@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.geom.AffineTransform;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.AbstractMap; // Needed for SimpleEntry
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +32,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.doubleThat; // Needed for double comparison
-import static org.mockito.ArgumentMatchers.eq;       // Needed for eq matcher
+import static org.mockito.ArgumentMatchers.doubleThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,17 +63,17 @@ class StatisticsDialogTest {
 
         realParentFrame = new JFrame();
 
-        // Default title
+
         when(mockCompilation.getTitle()).thenReturn("Test Compilation");
 
-        // Default mock behavior for tracks, duration. Crucial for dialog constructor.
-        if (mockCompilation.getTracks() == null) { // Ensure tracks list is not null if not already stubbed
+
+        if (mockCompilation.getTracks() == null) {
             when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
         }
-        if (mockCompilation.calculateTotalDuration() == null) { // Ensure duration is not null
+        if (mockCompilation.calculateTotalDuration() == null) {
             when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
         }
-        // Initialize statisticsDialog here AFTER basic mocks for constructor are set
+
         statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
     }
 
@@ -92,7 +92,7 @@ class StatisticsDialogTest {
 
     @Test
     void testInitializeUI() {
-        // Ensure statisticsDialog is created if not by default setup
+
         if (statisticsDialog == null) {
             when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
             when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
@@ -128,9 +128,9 @@ class StatisticsDialogTest {
         assertFalse(headerPanel.isOpaque());
         Component centerComponent = ((BorderLayout)headerPanel.getLayout()).getLayoutComponent(BorderLayout.CENTER);
         Component southComponent = ((BorderLayout)headerPanel.getLayout()).getLayoutComponent(BorderLayout.SOUTH);
-        assertNotNull(centerComponent, "Center component (title label) should not be null");
+        assertNotNull(centerComponent, "");
         assertTrue(centerComponent instanceof JLabel);
-        assertNotNull(southComponent, "South component (info label) should not be null");
+        assertNotNull(southComponent, "");
         assertTrue(southComponent instanceof JLabel);
     }
 
@@ -156,8 +156,8 @@ class StatisticsDialogTest {
 
     @Test
     void testCreateTabbedPane() {
-        // Ensure mockCompilation.getTracks() is stubbed before dialog creation or tab creation
-        when(mockCompilation.getTracks()).thenReturn(new ArrayList<>()); // For addArtistTab, addGenreTab etc.
+
+        when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
         if (statisticsDialog == null) { statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation); }
 
 
@@ -244,17 +244,17 @@ class StatisticsDialogTest {
     void testCreateArtistStatsPanel() {
         if (statisticsDialog == null) { statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation); }
         Map<String, Long> artistCounts = new HashMap<>();
-        artistCounts.put("Artist A", 2L);
-        artistCounts.put("Artist B", 1L);
+        artistCounts.put("Артист A", 2L);
+        artistCounts.put("Артист B", 1L);
         List<Map.Entry<String, Long>> sortedArtists = artistCounts.entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .collect(Collectors.toList());
 
         JPanel panel = statisticsDialog.createArtistStatsPanel(sortedArtists);
         assertNotNull(panel);
-        assertEquals(6, panel.getComponentCount()); // 2 header + 2x2 data rows
+        assertEquals(6, panel.getComponentCount());
         assertEquals("Виконавець", ((JLabel) panel.getComponent(0)).getText());
-        assertEquals("Artist A", ((JLabel) panel.getComponent(2)).getText());
+        assertEquals("Артист A", ((JLabel) panel.getComponent(2)).getText());
         assertEquals("2", ((JLabel) panel.getComponent(3)).getText());
     }
 
@@ -289,13 +289,12 @@ class StatisticsDialogTest {
     }
 
     private StatisticsDialog.HistogramPanel getHistogramPanelFromDialog(StatisticsDialog dialog) {
-        // This helper might need to be adapted if dialog.tabbedPane is not directly accessible
-        // or if UI initialization needs to be forced/checked more robustly.
+
         if (dialog.tabbedPane == null) {
             dialog.initializeUI();
         }
         JTabbedPane tabbedPane = dialog.tabbedPane;
-        // Fallback to navigate the component tree if field access isn't desired/possible
+
         if (tabbedPane == null && dialog.getContentPane().getComponentCount() > 0) {
             Component mainPanelComp = dialog.getContentPane().getComponent(0);
             if (mainPanelComp instanceof JPanel) {
@@ -308,20 +307,20 @@ class StatisticsDialogTest {
                 }
             }
         }
-        assertNotNull(tabbedPane, "TabbedPane could not be retrieved from dialog.");
+        assertNotNull(tabbedPane, "");
 
-        JPanel durationTabContent = (JPanel) tabbedPane.getComponentAt(0); // Assuming "Тривалість" is at index 0
+        JPanel durationTabContent = (JPanel) tabbedPane.getComponentAt(0);
         JScrollPane scrollPane = (JScrollPane) ((BorderLayout)durationTabContent.getLayout()).getLayoutComponent(BorderLayout.CENTER);
         return (StatisticsDialog.HistogramPanel) scrollPane.getViewport().getView();
     }
 
-    // Helper to get BarChartPanel from a specific tab
+
     private StatisticsDialog.BarChartPanel getBarChartPanelFromDialog(StatisticsDialog dialog, int tabIndex, String expectedTabTitle) {
         if (dialog.tabbedPane == null) {
-            dialog.initializeUI(); // Ensures UI, including tabbedPane, is built
+            dialog.initializeUI();
         }
         JTabbedPane tabbedPane = dialog.tabbedPane;
-        if (tabbedPane == null && dialog.getContentPane().getComponentCount() > 0) { // Fallback
+        if (tabbedPane == null && dialog.getContentPane().getComponentCount() > 0) {
             Component mainPanelComp = dialog.getContentPane().getComponent(0);
             if (mainPanelComp instanceof JPanel) {
                 JPanel mainPanel = (JPanel) mainPanelComp;
@@ -333,9 +332,9 @@ class StatisticsDialogTest {
                 }
             }
         }
-        assertNotNull(tabbedPane, "TabbedPane not found in dialog");
-        assertTrue(tabbedPane.getTabCount() > tabIndex, "Tab index out of bounds.");
-        assertEquals(expectedTabTitle, tabbedPane.getTitleAt(tabIndex), "Incorrect tab found.");
+        assertNotNull(tabbedPane, "");
+        assertTrue(tabbedPane.getTabCount() > tabIndex, "");
+        assertEquals(expectedTabTitle, tabbedPane.getTitleAt(tabIndex), "");
 
         Component tabContent = tabbedPane.getComponentAt(tabIndex);
         if (tabContent instanceof JPanel) {
@@ -348,18 +347,18 @@ class StatisticsDialogTest {
                     if (view instanceof StatisticsDialog.BarChartPanel) {
                         return (StatisticsDialog.BarChartPanel) view;
                     } else {
-                        fail("View in JScrollPane is not a BarChartPanel. Actual: " + (view != null ? view.getClass().getName() : "null"));
+                        fail(" " + (view != null ? view.getClass().getName() : "null"));
                     }
                 } else {
-                    fail("Center component of tab panel is not a JScrollPane. Actual: " + (centerComponent != null ? centerComponent.getClass().getName() : "null"));
+                    fail(" " + (centerComponent != null ? centerComponent.getClass().getName() : "null"));
                 }
             } else {
-                fail("Layout of tab panel is not BorderLayout.");
+                fail("");
             }
         } else {
-            fail("Tab content is not a JPanel.");
+            fail("");
         }
-        return null; // Should not be reached if assertions pass or fail throws
+        return null;
     }
 
 
@@ -367,21 +366,19 @@ class StatisticsDialogTest {
         Graphics2D g2dMock = mock(Graphics2D.class);
         FontMetrics mockFm = mock(FontMetrics.class);
 
-        // Lenient stubs for common Graphics2D methods that might be called by super.paintComponent or drawing logic
-        Mockito.lenient().when(g2dMock.create()).thenReturn(g2dMock); // Common pattern for g2d usage
+
+        Mockito.lenient().when(g2dMock.create()).thenReturn(g2dMock);
         Mockito.lenient().when(g2dMock.getClipBounds()).thenReturn(new Rectangle(0, 0, 1000, 1000));
         Mockito.lenient().when(g2dMock.getColor()).thenReturn(Color.BLACK); // Default color
-        Mockito.lenient().when(g2dMock.getFont()).thenReturn(new Font("SansSerif", Font.PLAIN, 12)); // Default font
-        Mockito.lenient().when(g2dMock.getTransform()).thenReturn(new AffineTransform()); // Default transform
+        Mockito.lenient().when(g2dMock.getFont()).thenReturn(new Font("SansSerif", Font.PLAIN, 12));
+        Mockito.lenient().when(g2dMock.getTransform()).thenReturn(new AffineTransform());
 
         Mockito.lenient().when(g2dMock.getFontMetrics(any(Font.class))).thenReturn(mockFm);
-        Mockito.lenient().when(mockFm.stringWidth(anyString())).thenReturn(50); // Arbitrary default width
-        Mockito.lenient().when(mockFm.getHeight()).thenReturn(15);       // Arbitrary default height
-        Mockito.lenient().when(mockFm.getAscent()).thenReturn(12);        // Arbitrary default ascent
+        Mockito.lenient().when(mockFm.stringWidth(anyString())).thenReturn(50);
+        Mockito.lenient().when(mockFm.getHeight()).thenReturn(15);
+        Mockito.lenient().when(mockFm.getAscent()).thenReturn(12);
 
-        // For drawLine, fillRect, drawRect, drawString, rotate etc., we usually verify them rather than stubbing,
-        // unless they return a value that subsequent code depends on.
-        // Mockito.lenient().setRenderingHint(any(), any()); // if setRenderingHint is called often
+
 
         return g2dMock;
     }
@@ -395,7 +392,7 @@ class StatisticsDialogTest {
         fewTracks.add(trackShort);
 
         when(mockCompilation.getTracks()).thenReturn(fewTracks);
-        // Re-create dialog for this specific track setup
+
         if (statisticsDialog != null) statisticsDialog.dispose();
         statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
         StatisticsDialog.HistogramPanel panelFewTracks = getHistogramPanelFromDialog(statisticsDialog);
@@ -404,7 +401,7 @@ class StatisticsDialogTest {
         panelFewTracks.paintComponent(g2dMock);
 
         int panelPadding = 80;
-        long maxSecsFew = panelFewTracks.getMaxValue(); // Will be 120L
+        long maxSecsFew = panelFewTracks.getMaxValue();
         assertEquals(120L, maxSecsFew);
         int chartHeightFew = panelFewTracks.getHeight() - 2 * panelPadding;
         int barHeightFew = (int) (chartHeightFew * trackShort.getDuration().getSeconds() / maxSecsFew);
@@ -479,17 +476,15 @@ class StatisticsDialogTest {
         verify(g2dMock).drawString(eq(expectedTruncatedTitle), eq(xTrunc - 10), eq(panelTruncation.getHeight() - panelPaddingTrunc + 15));
     }
 
-    // New test for drawArtistBar
     @Test
     void testDrawArtistBar_EffectsViaPaintComponent() {
-        // 1. Setup Artist Data
+
         Map.Entry<String, Long> artist1 = new AbstractMap.SimpleEntry<>("ArtistUno", 70L);
         Map.Entry<String, Long> artist2 = new AbstractMap.SimpleEntry<>("LongArtistNameNumeroDos", 30L);
-        // This list represents the data as it would be *after* processing in addArtistTab (sorted, limited)
-        // For testing createArtistChart directly, this is what it would receive.
+
 
         List<MusicTrack> tracks = new ArrayList<>();
-        // Create dummy tracks to simulate data that would lead to artist1 and artist2 counts
+
         for (int i = 0; i < artist1.getValue(); i++) {
             tracks.add(new MusicTrack("T_A1_" + i, artist1.getKey(), MusicGenre.ROCK, Duration.ofMinutes(3)));
         }
@@ -498,49 +493,45 @@ class StatisticsDialogTest {
         }
         when(mockCompilation.getTracks()).thenReturn(tracks);
 
-        // Re-initialize dialog to use the new mock data for tracks.
-        // This ensures addArtistTab processes 'tracks' and calls createArtistChart with derived data.
+
         if (statisticsDialog != null) statisticsDialog.dispose();
         statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
 
-        // 2. Get Artist Chart Panel
-        // Index 2 for "Виконавці" tab
-        StatisticsDialog.BarChartPanel artistChartPanel = getBarChartPanelFromDialog(statisticsDialog, 2, "Виконавці");
-        assertNotNull(artistChartPanel, "Artist chart panel should not be null");
 
-        // Verify that the panel's internal 'entries' list matches our expectation
-        // (after sorting by value by addArtistTab and potential limiting to 10 artists)
-        @SuppressWarnings("unchecked") // Safe cast due to how BarChartPanel is constructed for artists
+        StatisticsDialog.BarChartPanel artistChartPanel = getBarChartPanelFromDialog(statisticsDialog, 2, "Виконавці");
+        assertNotNull(artistChartPanel, "");
+
+
+        @SuppressWarnings("unchecked")
         List<Map.Entry<String, Long>> panelEntries = (List<Map.Entry<String, Long>>) artistChartPanel.entries;
 
         assertNotNull(panelEntries);
         assertEquals(2, panelEntries.size(), "Panel should have 2 artist entries based on input tracks.");
-        // Entries in the panel are sorted by count descending. ArtistUno (70) then LongArtistNameNumeroDos (30)
+
         assertEquals(artist1.getKey(), panelEntries.get(0).getKey());
         assertEquals(artist1.getValue(), panelEntries.get(0).getValue());
         assertEquals(artist2.getKey(), panelEntries.get(1).getKey());
         assertEquals(artist2.getValue(), panelEntries.get(1).getValue());
 
-        // 3. Prepare Graphics2D mock
+
         Graphics2D g2dMock = createMockGraphics2D();
 
-        // 4. Call paintComponent
-        artistChartPanel.setSize(800, 500); // Set a size for calculations within paintComponent
-        artistChartPanel.paintComponent(g2dMock); // This triggers drawBars -> drawArtistBar
 
-        // 5. Verification
+        artistChartPanel.setSize(800, 500);
+        artistChartPanel.paintComponent(g2dMock);
+
+
         int panelWidth = artistChartPanel.getWidth();
         int panelHeight = artistChartPanel.getHeight();
-        int padding = 80; // Default padding used in BarChartPanel and its ancestors
+        int padding = 80;
         int chartWidth = panelWidth - 2 * padding;
         int chartHeight = panelHeight - 2 * padding;
-        long maxCount = artist1.getValue(); // Max count is 70L from artist1
+        long maxCount = artist1.getValue();
 
-        // barWidth is calculated within BarChartPanel's paintComponent before calling drawBars.
-        // Recalculate for verification:
+
         int expectedBarWidth = Math.max(20, chartWidth / (panelEntries.size() * 2));
 
-        Color[] predefinedColors = { // Colors from StatisticsDialog.createArtistChart
+        Color[] predefinedColors = {
                 new Color(70, 130, 180), new Color(76, 175, 80), new Color(244, 67, 54),
                 new Color(255, 152, 0), new Color(156, 39, 176), new Color(96, 125, 139),
                 new Color(121, 85, 72), new Color(233, 30, 99), new Color(0, 150, 136),
@@ -549,10 +540,10 @@ class StatisticsDialogTest {
 
         InOrder inOrder = Mockito.inOrder(g2dMock);
 
-        // --- Verification for Artist 1 (entry1 from panelEntries, which is artist1) ---
+
         Map.Entry<String, Long> entry1 = panelEntries.get(0);
         int barHeight1 = (int) (chartHeight * entry1.getValue() / maxCount);
-        // The index for color is based on the position in the 'panelEntries' (or 'artists') list
+
         Color color1 = predefinedColors[0 % predefinedColors.length];
         int x1 = padding + expectedBarWidth / 2;
         int y_rect1 = panelHeight - padding - barHeight1;
@@ -562,8 +553,8 @@ class StatisticsDialogTest {
         inOrder.verify(g2dMock).setColor(color1.darker());
         inOrder.verify(g2dMock).drawRect(x1, y_rect1, expectedBarWidth, barHeight1);
 
-        // drawArtistLabel for entry1
-        String labelText1 = entry1.getKey(); // "ArtistUno", length is 9, no truncation
+
+        String labelText1 = entry1.getKey();
         double rotateCenterX1 = x1 + (double)expectedBarWidth / 2;
         double rotateCenterY1 = panelHeight - padding + 15;
         inOrder.verify(g2dMock).setColor(new Color(70, 70, 70));
@@ -571,14 +562,13 @@ class StatisticsDialogTest {
         inOrder.verify(g2dMock).drawString("ArtistU...", x1 - 10, panelHeight - padding + 15);
         inOrder.verify(g2dMock).rotate(eq(Math.PI / 4), doubleThat(d -> Math.abs(d - rotateCenterX1) < 1e-9), doubleThat(d -> Math.abs(d - rotateCenterY1) < 1e-9));
 
-        // drawValueLabel for entry1 (color is new Color(70,70,70) from previous drawArtistLabel)
         inOrder.verify(g2dMock).drawString(entry1.getValue().toString(), x1 + 5, panelHeight - padding - barHeight1 - 5);
 
-        // --- Verification for Artist 2 (entry2 from panelEntries, which is artist2) ---
+
         Map.Entry<String, Long> entry2 = panelEntries.get(1);
         int barHeight2 = (int) (chartHeight * entry2.getValue() / maxCount);
         Color color2 = predefinedColors[1 % predefinedColors.length];
-        int x2 = x1 + expectedBarWidth * 2; // Position of the next bar
+        int x2 = x1 + expectedBarWidth * 2;
         int y_rect2 = panelHeight - padding - barHeight2;
 
         inOrder.verify(g2dMock).setColor(color2);
@@ -586,9 +576,9 @@ class StatisticsDialogTest {
         inOrder.verify(g2dMock).setColor(color2.darker());
         inOrder.verify(g2dMock).drawRect(x2, y_rect2, expectedBarWidth, barHeight2);
 
-        // drawArtistLabel for entry2
-        String originalLabelText2 = entry2.getKey(); // "LongArtistNameNumeroDos"
-        String expectedLabelText2 = originalLabelText2.substring(0, 7) + "..."; // Truncated
+
+        String originalLabelText2 = entry2.getKey();
+        String expectedLabelText2 = originalLabelText2.substring(0, 7) + "...";
         double rotateCenterX2 = x2 + (double)expectedBarWidth / 2;
         double rotateCenterY2 = panelHeight - padding + 15;
         inOrder.verify(g2dMock).setColor(new Color(70, 70, 70));
@@ -596,10 +586,10 @@ class StatisticsDialogTest {
         inOrder.verify(g2dMock).drawString(expectedLabelText2, x2 - 10, panelHeight - padding + 15);
         inOrder.verify(g2dMock).rotate(eq(Math.PI / 4), doubleThat(d -> Math.abs(d - rotateCenterX2) < 1e-9), doubleThat(d -> Math.abs(d - rotateCenterY2) < 1e-9));
 
-        // drawValueLabel for entry2
+
         inOrder.verify(g2dMock).drawString(entry2.getValue().toString(), x2 + 5, panelHeight - padding - barHeight2 - 5);
 
-        // Verify that no other unexpected interactions with these specific methods happened for bars
-        inOrder.verifyNoMoreInteractions(); // Or be more specific if other drawing happens
+
+        inOrder.verifyNoMoreInteractions();
     }
 }

@@ -16,7 +16,7 @@ class ToolBarFactoryTest {
 
         assertNotNull(toolBar);
         assertFalse(toolBar.isFloatable());
-        assertEquals(9, toolBar.getComponentCount()); // 5 кнопок + 4 роздільники
+        assertEquals(9, toolBar.getComponentCount());
     }
 
     @Test
@@ -97,12 +97,10 @@ class ToolBarFactoryTest {
     void testCreateToolBarExceptionHandling() {
         Runnable failingAction = () -> { throw new RuntimeException("Test exception"); };
 
-        // Перевіряємо, що метод не кидає виняток, а лише логує його
+
         assertDoesNotThrow(() ->
                 ToolBarFactory.createToolBar(failingAction, failingAction, failingAction, failingAction, failingAction));
 
-        // Або можемо перевірити, що логування відбувається (якщо є можливість перевірити лог)
-        // Це залежить від вашої реалізації логування
     }
 
     @Test
@@ -110,34 +108,33 @@ class ToolBarFactoryTest {
         JToolBar toolBar = new JToolBar();
         Runnable failingAction = () -> { throw new RuntimeException("Test exception"); };
 
-        // Аналогічно, перевіряємо, що метод не кидає виняток
+
         assertDoesNotThrow(() ->
                 ToolBarFactory.addToolbarButton(toolBar, "Тест", "T", failingAction));
     }
 
     @Test
     void createStyledButton_shouldReturnButtonWithCorrectProperties() {
-        // Arrange
+
         String text = "Test Button";
         String icon = "⭐";
         AtomicBoolean actionExecuted = new AtomicBoolean(false);
         Runnable action = () -> actionExecuted.set(true);
 
-        // Act
+
         JButton button = ToolBarFactory.createStyledButton(text, icon, action);
 
-        // Assert
-        // Verify text and icon
+
         assertEquals(String.format("%s %s", icon, text), button.getText());
 
-        // Verify button properties
+
         assertFalse(button.isContentAreaFilled());
         assertEquals(Color.WHITE, button.getForeground());
         assertFalse(button.isFocusPainted());
         assertEquals(Cursor.HAND_CURSOR, button.getCursor().getType());
         assertNotNull(button.getBorder());
 
-        // Verify action execution
+
         assertFalse(actionExecuted.get());
         button.doClick();
         assertTrue(actionExecuted.get());
@@ -147,47 +144,46 @@ class ToolBarFactoryTest {
 
     @Test
     void createStyledButton_shouldHaveCustomPainting() {
-        // Arrange
+
         String text = "Paint Test";
         String icon = "🎨";
         Runnable action = () -> {};
 
-        // Act
+
         JButton button = ToolBarFactory.createStyledButton(text, icon, action);
 
-        // Assert - verify the button is an anonymous subclass with overridden paint methods
+
         assertNotEquals(JButton.class, button.getClass());
 
-        // Verify the button has the expected size after painting
+
         button.setSize(100, 40);
         Image image = new BufferedImage(100, 40, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
         button.paint(g);
         g.dispose();
 
-        // Basic verification that painting completed without exceptions
+
         assertFalse(button.isDisplayable());
     }
 
     @Test
     void createStyledButton_shouldShowDifferentColorsForStates() {
-        // Arrange
+
         String text = "State Colors";
         String icon = "🌈";
         Runnable action = () -> {};
         JButton button = ToolBarFactory.createStyledButton(text, icon, action);
         button.setSize(100, 40);
 
-        // Act & Assert - verify different colors for different states
-        // Normal state
+
         assertFalse(button.getModel().isPressed());
         assertFalse(button.getModel().isRollover());
 
-        // Rollover state
+
         button.getModel().setRollover(true);
         assertTrue(button.getModel().isRollover());
 
-        // Pressed state
+
         button.getModel().setPressed(true);
         assertTrue(button.getModel().isPressed());
     }

@@ -80,21 +80,21 @@ class DialogFactoryTest {
     @Test
     void testShowAddCompilationDialog() {
         DialogFactory.showAddCompilationDialog(parentFrame, discManager, listModel, statusBar);
-        // Verify the dialog was created (can't directly test visibility in unit tests)
+
         assertTrue(parentFrame.getOwnedWindows().length > 0);
     }
 
     @Test
     void testShowRenameCompilationDialog() {
         DialogFactory.showRenameCompilationDialog(parentFrame, discManager, listModel, statusBar, testCompilation);
-        // Verify the dialog was created
+
         assertTrue(parentFrame.getOwnedWindows().length > 0);
     }
 
     @Test
     void testShowDeleteCompilationDialog() {
         DialogFactory.showDeleteCompilationDialog(parentFrame, discManager, listModel, statusBar, testCompilation);
-        // Verify the dialog was created
+
         assertTrue(parentFrame.getOwnedWindows().length > 0);
     }
 

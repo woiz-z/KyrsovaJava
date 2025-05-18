@@ -30,17 +30,17 @@ class MusicAppGUITest {
 
     @BeforeEach
     void setUp() {
-        // Мокуємо залежності
+
         mockDiscManager = Mockito.mock(DiscManager.class);
         mockListModel = Mockito.mock(DefaultListModel.class);
         mockCompilationList = Mockito.mock(JList.class);
         mockStatusBar = Mockito.mock(JLabel.class);
         mockSearchPanel = Mockito.mock(CompilationSearchPanel.class);
 
-        // Створюємо екземпляр класу з моками
+
         musicAppGUI = new MusicAppGUI() {
             protected void initializeUI() {
-                // Перевизначаємо, щоб уникнути реальної ініціалізації UI
+
                 this.discManager = mockDiscManager;
                 this.listModel = mockListModel;
                 this.compilationList = mockCompilationList;
@@ -49,7 +49,7 @@ class MusicAppGUITest {
             }
         };
 
-        // Викликаємо ініціалізацію вручну
+
         musicAppGUI.initializeUI();
     }
 
@@ -77,7 +77,7 @@ class MusicAppGUITest {
 
     @Test
     void testSetupLookAndFeel() {
-        // Це більше інтеграційний тест, але ми можемо перевірити, що метод не викидає винятків
+
         assertDoesNotThrow(() -> musicAppGUI.setupLookAndFeel());
     }
 
@@ -92,7 +92,7 @@ class MusicAppGUITest {
     @Test
     void testAddCompilation() {
         assertDoesNotThrow(() -> musicAppGUI.addCompilation());
-        // Тут можна перевірити, що відповідний метод DialogFactory був викликаний
+
     }
 
     @Test
@@ -136,7 +136,7 @@ class MusicAppGUITest {
     void testShowError() {
         musicAppGUI.showError("Test Title", "Test Message");
         verify(mockStatusBar).setText(" Помилка: Test Message");
-        // Можна також перевірити, що JOptionPane.showMessageDialog був викликаний
+
     }
 
     @Test
@@ -146,19 +146,19 @@ class MusicAppGUITest {
 
     @Test
     void testLoadFromFile_Success() throws IOException, ClassNotFoundException {
-        // Використовуємо try-with-resources для MockedStatic
+
         try (MockedStatic<JOptionPane> mockedJOptionPane = Mockito.mockStatic(JOptionPane.class)) {
             JFileChooser mockFileChooser = Mockito.mock(JFileChooser.class);
             File mockFile = Mockito.mock(File.class);
             String fakeFilePath = "dummy/path/to/file.dat";
 
-            // Налаштування моків
+
             when(mockFileChooser.showOpenDialog(any(Component.class))).thenReturn(JFileChooser.APPROVE_OPTION);
             when(mockFileChooser.getSelectedFile()).thenReturn(mockFile);
             when(mockFile.getPath()).thenReturn(fakeFilePath);
-            // Припускаємо, що discManager.loadFromFile не викидає виняток
+
             doNothing().when(mockDiscManager).loadFromFile(fakeFilePath);
-            // Припускаємо, що discManager.getCompilations() повертає порожній список для простоти
+
             when(mockDiscManager.getCompilations()).thenReturn(new ArrayList<>());
 
             System.out.println("Примітка: Тестування методів з `new JFileChooser()` всередині є складним " +
@@ -174,8 +174,7 @@ class MusicAppGUITest {
     @Test
     void testLoadFromFile_IOException() throws IOException, ClassNotFoundException {
         try (MockedStatic<JOptionPane> mockedJOptionPane = Mockito.mockStatic(JOptionPane.class)) {
-            // Цей тест також має ті ж обмеження з JFileChooser
-            // Припустимо, ми могли б змусити JFileChooser повернути файл
+
             String fakeFilePath = "dummy/path/to/file.dat";
 
 
@@ -190,7 +189,7 @@ class MusicAppGUITest {
     @Test
     void testLoadFromFile_ClassNotFoundException() throws IOException, ClassNotFoundException {
         try (MockedStatic<JOptionPane> mockedJOptionPane = Mockito.mockStatic(JOptionPane.class)) {
-            // Аналогічні обмеження з JFileChooser
+
             String fakeFilePath = "dummy/path/to/file.dat";
             ClassNotFoundException cnfException = new ClassNotFoundException("Тестова помилка класу не знайдено");
             doThrow(cnfException).when(mockDiscManager).loadFromFile(fakeFilePath);
@@ -203,7 +202,7 @@ class MusicAppGUITest {
     @Test
     void testSaveToFile_Success() throws IOException {
         try (MockedStatic<JOptionPane> mockedJOptionPane = Mockito.mockStatic(JOptionPane.class)) {
-            // Аналогічні обмеження з JFileChooser для saveToFile
+
             String fakeFilePath = "dummy/path/to/save.dat";
 
 
@@ -218,7 +217,7 @@ class MusicAppGUITest {
     @Test
     void testSaveToFile_IOException() throws IOException {
         try (MockedStatic<JOptionPane> mockedJOptionPane = Mockito.mockStatic(JOptionPane.class)) {
-            // Аналогічні обмеження
+
             String fakeFilePath = "dummy/path/to/save.dat";
             IOException ioException = new IOException("Тестова помилка збереження");
 

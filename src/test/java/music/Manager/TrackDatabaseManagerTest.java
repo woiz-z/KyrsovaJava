@@ -62,8 +62,7 @@ class TrackDatabaseManagerTest {
         createTables(); // Створюємо таблиці та тестову компіляцію в БД
 
         mockedDatabaseConfig = Mockito.mockStatic(DatabaseConfig.class);
-        // За замовчуванням, SUT отримує нове H2 з'єднання, щоб уникнути закриття `this.connection`
-        // Якщо тесту потрібна специфічна поведінка `this.connection`, це налаштовується локально в тесті.
+
         mockedDatabaseConfig.when(DatabaseConfig::getConnection).thenAnswer(invocation -> DriverManager.getConnection(H2_DB_URL, DB_USER, DB_PASSWORD));
 
 
@@ -82,8 +81,7 @@ class TrackDatabaseManagerTest {
         when(mockTrackListPanel.getTrackListModel()).thenReturn(mockTrackListModel);
         when(mockTrackListPanel.getTrackList()).thenReturn(mockJList);
         when(mockTrackListPanel.getParent()).thenReturn(mockParentDialog);
-        // Важливо: поле compilation в mockTrackListPanel має бути встановлене,
-        // якщо воно використовується в TrackDatabaseManager (наприклад, в updateHeaderInfo)
+
         mockTrackListPanel.compilation = testCompilation;
 
 
@@ -91,14 +89,12 @@ class TrackDatabaseManagerTest {
         mockedJOptionPane.when(() -> JOptionPane.showConfirmDialog(any(), anyString(), anyString(), anyInt(), anyInt()))
                 .thenReturn(JOptionPane.YES_OPTION);
 
-        // Налаштування для updateHeaderInfo, щоб уникнути NPE, якщо можливо
-        // Це дуже базове мокування, реальна проблема з HeaderPanel може потребувати змін в самому HeaderPanel
+
         JPanel mockMainPanel = mock(JPanel.class);
         Container mockContentPane = mock(Container.class);
         when(mockParentDialog.getContentPane()).thenReturn(mockContentPane);
         when(mockContentPane.getComponent(0)).thenReturn(mockMainPanel);
-        // Можливо, знадобиться мокувати конструктор HeaderPanel через PowerMockito,
-        // або передавати мок HeaderPanel в updateHeaderInfo, якщо метод буде змінено.
+
     }
 
     private void createTables() throws SQLException {
@@ -144,11 +140,7 @@ class TrackDatabaseManagerTest {
     @Test
     void testAddTrackToCompilation_Success() {
         MusicTrack newTrack = new MusicTrack("New Track", "New Artist", MusicGenre.POP, Duration.ofMinutes(4));
-        // ID для newTrack буде встановлено методом saveTrackToDatabase всередині addTrackToCompilation
 
-        // УВАГА: Наступний виклик може призвести до NPE в TrackDatabaseManager.updateHeaderInfo,
-        // якщо HeaderPanel.java має проблеми з ініціалізацією.
-        // Якщо тест падає тут через NPE в HeaderPanel, це вказує на проблему в HeaderPanel або його використанні.
         assertDoesNotThrow(() -> TrackDatabaseManager.addTrackToCompilation(mockParentDialog, testCompilation, mockTrackListPanel, newTrack),
                 "Додавання треку не повинно кидати виняток, якщо HeaderPanel працює коректно.");
 
@@ -177,7 +169,7 @@ class TrackDatabaseManagerTest {
 
     @Test
     void testUpdateTrack_Success() {
-        // testTrack вже збережений в БД через setUp -> saveTrackDirectlyToDb
+
         mockTrackListModel.addElement(testTrack);
         when(mockJList.getSelectedIndex()).thenReturn(0);
 
@@ -198,7 +190,7 @@ class TrackDatabaseManagerTest {
 
     @Test
     void testUpdateTrack_DatabaseError() throws SQLException {
-        // testTrack вже збережений в БД
+
         mockTrackListModel.addElement(testTrack);
         when(mockJList.getSelectedIndex()).thenReturn(0);
 
@@ -246,7 +238,7 @@ class TrackDatabaseManagerTest {
 
     @Test
     void testDeleteSelectedTrack_Success() {
-        // testTrack вже в БД
+
         mockTrackListModel.addElement(testTrack);
         when(mockJList.getSelectedValue()).thenReturn(testTrack);
 
@@ -339,9 +331,7 @@ class TrackDatabaseManagerTest {
         mockTrackListModel.addElement(trackJazz);
         mockTrackListModel.addElement(trackPop);
 
-        // Зберігаємо їх у БД (ID будуть присвоєні тут, через updateTracksInDatabase)
-        // Для цього тесту, метод sortTracksByGenre сам викликає updateTracksInDatabase,
-        // тому попереднє збереження не потрібне, якщо updateTracksInDatabase працює коректно з новими треками.
+
 
         assertDoesNotThrow(() -> TrackDatabaseManager.sortTracksByGenre(mockTrackListPanel, testCompilation));
 
@@ -441,8 +431,7 @@ class TrackDatabaseManagerTest {
         MusicTrack track1 = new MusicTrack("T1", "A1", MusicGenre.POP, Duration.ofMinutes(1));
         mockTrackListModel.addElement(track1);
 
-        // Використовуємо spy на з'єднанні, яке буде повернуто моком DatabaseConfig
-        // Це з'єднання буде закрито через try-with-resources в updateTracksInDatabase
+
         Connection spiedH2Connection = spy(DriverManager.getConnection(H2_DB_URL, DB_USER, DB_PASSWORD));
         doThrow(new SQLException("Simulated commit failed")).when(spiedH2Connection).commit();
         mockedDatabaseConfig.when(DatabaseConfig::getConnection).thenReturn(spiedH2Connection);
@@ -463,8 +452,7 @@ class TrackDatabaseManagerTest {
                 eq("Помилка бази даних"),
                 eq(JOptionPane.ERROR_MESSAGE)
         ));
-        // Не потрібно закривати spiedH2Connection тут, бо try-with-resources в SUT це зробить.
-        // Відновлюємо мок для наступних тестів
+
         mockedDatabaseConfig.when(DatabaseConfig::getConnection).thenAnswer(invocation -> DriverManager.getConnection(H2_DB_URL, DB_USER, DB_PASSWORD));
     }
 
@@ -488,12 +476,7 @@ class TrackDatabaseManagerTest {
             );
             mockedDatabaseConfig.when(DatabaseConfig::getConnection).thenReturn(faultyConnection);
 
-            // УВАГА: Наступний виклик може призвести до NPE в TrackDatabaseManager.updateHeaderInfo,
-            // якщо HeaderPanel.java має проблеми з ініціалізацією. Це проблема HeaderPanel.
-            // Для цілей цього тесту, ми очікуємо, що addTrackToCompilation не впаде *до* моменту
-            // встановлення ID, або що він коректно обробить ситуацію, коли ID не встановлено.
-            // Якщо NPE виникає в updateHeaderInfo, assertDoesNotThrow все одно "пройде",
-            // оскільки NPE є нащадком Throwable.
+
             assertDoesNotThrow(() -> TrackDatabaseManager.addTrackToCompilation(
                             mockParentDialog, testCompilation, mockTrackListPanel, trackWithoutId),
                     "addTrackToCompilation не повинен падати через логіку ID, але може через UI (HeaderPanel NPE)");
@@ -523,19 +506,12 @@ class TrackDatabaseManagerTest {
     }
 
     private void saveTrackDirectlyToDb(MusicTrack track, Long compilationId) {
-        // Цей метод має оновлювати ID переданого об'єкта track.
-        // Якщо трек передається без ID, він вставляється і ID встановлюється.
-        // Якщо трек передається з ID, цей метод має оновлювати існуючий запис.
-        // Поточна реалізація лише вставляє, що може призвести до дублікатів, якщо викликати кілька разів з тим самим об'єктом.
-        // Для тестів, де потрібен трек з відомим ID, краще спочатку вставити його і переконатися, що ID встановлено.
+
 
         String sql;
         boolean update = track.getId() != null; // Припускаємо, що якщо ID є, то це оновлення
 
-        // Проста логіка: якщо ID є, то це помилка для "прямого збереження як нового"
-        // Для чистоти тестів, цей метод просто вставляє, якщо ID ще не встановлено,
-        // або якщо встановлено, то це може бути помилкою дизайну тесту, якщо очікується оновлення.
-        // Для простоти, зараз він просто вставляє і встановлює ID, якщо його немає.
+
 
         if (track.getId() == null) { // Тільки якщо ID ще не встановлено
             sql = "INSERT INTO tracks (title, artist, genre, duration, compilation_id) VALUES (?, ?, ?, ?, ?)";
@@ -558,8 +534,7 @@ class TrackDatabaseManagerTest {
                 fail("Помилка збереження треку напряму в БД: " + e.getMessage());
             }
         }
-        // Якщо track.getId() != null, ми припускаємо, що він вже в БД, або це помилка тесту.
-        // Для тестів оновлення, трек вже має бути в БД.
+
     }
 
 
