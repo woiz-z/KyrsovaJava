@@ -60,7 +60,7 @@ class DiscManagerTest {
         List<MusicCompilation> compilations = discManager.getCompilations();
 
         assertEquals(13, compilations.size());
-        assertEquals("жопа", compilations.get(0).getTitle());
+        assertEquals("тест", compilations.get(0).getTitle());
     }
 
     @Test
