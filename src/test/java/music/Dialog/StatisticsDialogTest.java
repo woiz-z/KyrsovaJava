@@ -116,9 +116,7 @@ class StatisticsDialogTest {
 
     @Test
     void testCreateHeaderPanel() {
-        // `mockCompilation.getTracks()` is already stubbed in `setUp`.
-        // `statisticsDialog` is also initialized in `setUp`.
-        // The previous incorrect `when(compilationService.calculateTotalDuration(...))` line has been removed.
+
 
         JPanel headerPanel = statisticsDialog.createHeaderPanel();
         assertNotNull(headerPanel);
@@ -137,17 +135,13 @@ class StatisticsDialogTest {
         List<MusicTrack> tracksForInfo = new ArrayList<>();
         tracksForInfo.add(new MusicTrack("T1", "A1", MusicGenre.POP, Duration.ofMinutes(3)));
         tracksForInfo.add(new MusicTrack("T2", "A2", MusicGenre.ROCK, Duration.ofMinutes(4)));
-        when(mockCompilation.getTracks()).thenReturn(tracksForInfo); // Correctly stubs mockCompilation.getTracks() for *this test*.
+        when(mockCompilation.getTracks()).thenReturn(tracksForInfo);
 
-        // REMOVED: This `when` call was incorrect as `compilationService` in the test is a real object.
-        // The dialog itself uses its *own* internal `MusicCompilationService` instance (also real).
-        // To test the info label, we want `statisticsDialog` to compute the actual duration.
-        // when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ofMinutes(7));
+
 
         JLabel infoLabel = statisticsDialog.createInfoLabel();
         assertNotNull(infoLabel);
-        // The `expectedText` relies on the `statisticsDialog`'s internal `compilationService`
-        // correctly calculating the total duration of the `tracksForInfo` list (3+4=7 minutes).
+
         String expectedText = String.format("%d треків • %d хв %d сек",
                 2, 7, 0);
         assertEquals(expectedText, infoLabel.getText());
@@ -188,10 +182,9 @@ class StatisticsDialogTest {
 
         MusicCompilation newMockCompilation = mock(MusicCompilation.class);
         when(newMockCompilation.getTitle()).thenReturn("New Comp");
-        // CORRECTED: Line 195 - Ensure it returns a List<MusicTrack>.
+
         when(newMockCompilation.getTracks()).thenReturn(new ArrayList<>());
-        // REMOVED: This was another attempt to stub a real object (compilationService in the test class).
-        // when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ZERO);
+
 
         JFrame localParent = new JFrame();
         StatisticsDialog dialogToDispose = spy(new StatisticsDialog(localParent, newMockCompilation));
@@ -232,7 +225,7 @@ class StatisticsDialogTest {
 
         JPanel panel = statisticsDialog.createGenreStatsPanel(sortedGenres);
         assertNotNull(panel);
-        assertEquals(6, panel.getComponentCount()); // 2 header + 2x2 data rows
+        assertEquals(6, panel.getComponentCount());
         assertEquals("Жанр", ((JLabel) panel.getComponent(0)).getText());
         assertEquals(MusicGenre.ROCK.toString(), ((JLabel) panel.getComponent(2)).getText());
         assertEquals("2", ((JLabel) panel.getComponent(3)).getText());
@@ -415,7 +408,7 @@ class StatisticsDialogTest {
         verify(g2dMock).drawRect(eq(xFew), eq(panelFewTracks.getHeight() - panelPadding - barHeightFew), eq(barWidthFew), eq(barHeightFew));
 
         verify(g2dMock).setColor(new Color(70, 70, 70));
-        // Use doubleThat for comparing doubles with a tolerance
+
         verify(g2dMock).rotate(eq(-Math.PI / 4), doubleThat(d -> Math.abs(d - (xFew + (double)barWidthFew / 2)) < 1e-9), doubleThat(d -> Math.abs(d - (panelFewTracks.getHeight() - panelPadding + 15)) < 1e-9) );
         verify(g2dMock).drawString(eq("ShortNa..."), eq(xFew - 10), eq(panelFewTracks.getHeight() - panelPadding + 15));
         verify(g2dMock).rotate(eq(Math.PI / 4), doubleThat(d -> Math.abs(d - (xFew + (double)barWidthFew / 2)) < 1e-9), doubleThat(d -> Math.abs(d - (panelFewTracks.getHeight() - panelPadding + 15)) < 1e-9));
