@@ -12,7 +12,7 @@ import java.time.Duration;
  */
 public class ModernTrackListRenderer extends DefaultListCellRenderer {
 
-    // Константи для стилізації
+
     private static final Color SELECTED_BACKGROUND = new Color(220, 240, 255);
     private static final Color SELECTED_BORDER_COLOR = new Color(180, 220, 255);
     private static final Color EVEN_ROW_BACKGROUND = new Color(255, 255, 255, 200);
@@ -34,13 +34,13 @@ public class ModernTrackListRenderer extends DefaultListCellRenderer {
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                                                   boolean isSelected, boolean cellHasFocus) {
-        // Виклик батьківського методу для базового налаштування
+
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-        // Налаштування базового відступу
+
         setBorder(BorderFactory.createEmptyBorder(PADDING, PADDING * 2, PADDING, PADDING * 2));
 
-        // Перевірка, чи є об'єкт MusicTrack
+
         if (value instanceof MusicTrack) {
             MusicTrack track = (MusicTrack) value;
             configureTrackDisplay(track, isSelected, index);
@@ -57,10 +57,10 @@ public class ModernTrackListRenderer extends DefaultListCellRenderer {
      * @param index      Індекс треку в списку
      */
     private void configureTrackDisplay(MusicTrack track, boolean isSelected, int index) {
-        // Форматування тексту треку з використанням HTML
+
         setText(formatTrackText(track));
 
-        // Налаштування стилю в залежності від стану вибору
+
         if (isSelected) {
             setBackground(SELECTED_BACKGROUND);
             setBorder(BorderFactory.createCompoundBorder(
