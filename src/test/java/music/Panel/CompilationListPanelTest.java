@@ -1,10 +1,9 @@
 package music.Panel;
 
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.Renderer.CompilationListRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import javax.swing.*;
 import javax.swing.border.Border;

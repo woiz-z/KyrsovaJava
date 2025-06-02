@@ -2,10 +2,9 @@ package music.Manager;
 
 import music.DatabaseConfig;
 import music.Dialog.CompilationDetailsDialog;
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
-import music.Panel.HeaderPanel; // Можливо, знадобиться для мокування, якщо updateHeaderInfo тестується глибше
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import music.Panel.TrackListPanel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

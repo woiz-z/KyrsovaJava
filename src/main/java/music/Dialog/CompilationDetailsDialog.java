@@ -1,7 +1,7 @@
 package music.Dialog;
 
 import music.Manager.DiscManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.Panel.ButtonPanel;
 import music.Panel.HeaderPanel;
 import music.Panel.TrackListPanel;

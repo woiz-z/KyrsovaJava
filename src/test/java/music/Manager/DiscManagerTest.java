@@ -1,9 +1,9 @@
 package music.Manager;
 
 import music.DatabaseConfig;
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

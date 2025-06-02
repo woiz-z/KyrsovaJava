@@ -1,6 +1,7 @@
 package music.Panel;
 
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,7 @@ public class HeaderPanel {
     private static final Logger LOGGER = LogManager.getLogger(HeaderPanel.class);
     private final JPanel panel;
     private final JLabel infoLabel;
+    private final MusicCompilationService compilationService=new MusicCompilationService();
 
     /**
      * Конструктор ініціалізує панель заголовка для заданої музичної збірки.
@@ -96,8 +98,8 @@ public class HeaderPanel {
         if (compilation != null) {
             updateInfo(
                     compilation.getTracks().size(),
-                    compilation.calculateTotalDuration().toMinutes(),
-                    compilation.calculateTotalDuration().getSeconds()
+                    compilationService.calculateTotalDuration(compilation.getTracks()).toMinutes(),
+                    compilationService.calculateTotalDuration(compilation.getTracks()).getSeconds()
             );
         } else {
             infoLabel.setText("Немає даних компіляції");

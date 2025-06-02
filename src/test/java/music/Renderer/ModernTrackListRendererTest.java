@@ -1,6 +1,6 @@
 package music.Renderer;
 
-import music.Music.MusicTrack;
+import music.Models.MusicTrack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.time.Duration;
 
-import static music.Music.MusicGenre.*;
+import static music.Models.MusicGenre.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ModernTrackListRendererTest {

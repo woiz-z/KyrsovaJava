@@ -1,7 +1,7 @@
 package music;
 
 import music.Manager.DiscManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.Panel.CompilationSearchPanel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 class MusicAppGUITest {
 

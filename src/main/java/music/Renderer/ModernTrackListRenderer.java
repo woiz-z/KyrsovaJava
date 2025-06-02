@@ -1,6 +1,6 @@
 package music.Renderer;
 
-import music.Music.MusicTrack;
+import music.Models.MusicTrack;
 import javax.swing.*;
 import java.awt.*;
 import java.time.Duration;

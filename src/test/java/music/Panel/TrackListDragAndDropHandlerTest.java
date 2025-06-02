@@ -1,8 +1,10 @@
-package music.Music;
+package music.Panel;
 
 import music.Dialog.CompilationDetailsDialog;
 import music.Manager.TrackDatabaseManager;
-import music.Panel.TrackListPanel;
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;

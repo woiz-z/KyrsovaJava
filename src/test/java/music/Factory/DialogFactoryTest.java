@@ -1,10 +1,9 @@
 package music.Factory;
 
 import music.Manager.DiscManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import javax.swing.*;
 import java.awt.*;

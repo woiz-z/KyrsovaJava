@@ -1,8 +1,9 @@
 package music.Dialog;
 
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class StatisticsDialog extends JDialog {
     private static final Logger logger = LogManager.getLogger(StatisticsDialog.class);
     private final MusicCompilation compilation;
+    private final MusicCompilationService compilationService=new MusicCompilationService();
     JTabbedPane tabbedPane;
 
     /**
@@ -133,8 +135,8 @@ public class StatisticsDialog extends JDialog {
         JLabel label = new JLabel(String.format(
                 "%d треків • %d хв %d сек",
                 compilation.getTracks().size(),
-                compilation.calculateTotalDuration().toMinutes(),
-                compilation.calculateTotalDuration().getSeconds() % 60
+                compilationService.calculateTotalDuration(compilation.getTracks()).toMinutes(),
+                compilationService.calculateTotalDuration(compilation.getTracks()).getSeconds() % 60
         ));
         label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         label.setForeground(new Color(100, 100, 100));
@@ -179,7 +181,7 @@ public class StatisticsDialog extends JDialog {
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         List<MusicTrack> tracks = compilation.getTracks();
-        Duration totalDuration = compilation.calculateTotalDuration();
+        Duration totalDuration = compilationService.calculateTotalDuration(compilation.getTracks());
         Duration avgDuration = tracks.isEmpty() ? Duration.ZERO :
                 Duration.ofSeconds(totalDuration.getSeconds() / tracks.size());
         Duration shortest = tracks.stream().map(MusicTrack::getDuration)

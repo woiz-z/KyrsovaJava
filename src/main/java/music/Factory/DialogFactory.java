@@ -1,7 +1,7 @@
 package music.Factory;
 
 import music.Manager.DiscManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

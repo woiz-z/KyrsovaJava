@@ -1,9 +1,9 @@
 package music.Manager;
 
 import music.DatabaseConfig;
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +20,7 @@ import java.util.List;
 public class DiscManager {
     private static final Logger logger = LogManager.getLogger(DiscManager.class);
     private final List<MusicCompilation> compilations;
+
 
     /**
      * Конструктор ініціалізує список збірок та завантажує дані з бази даних.

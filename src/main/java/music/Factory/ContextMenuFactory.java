@@ -1,6 +1,6 @@
 package music.Factory;
 
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.MusicAppGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

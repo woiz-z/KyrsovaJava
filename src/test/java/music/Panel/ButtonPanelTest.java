@@ -1,11 +1,9 @@
 package music.Panel;
 
 import music.Dialog.CompilationDetailsDialog;
-import music.Music.MusicCompilation;
-import music.Dialog.StatisticsDialog;
+import music.Models.MusicCompilation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import javax.swing.*;
 import java.awt.*;

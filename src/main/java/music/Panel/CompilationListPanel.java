@@ -1,7 +1,7 @@
 package music.Panel;
 
 import music.Factory.ContextMenuFactory;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.Renderer.CompilationListRenderer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

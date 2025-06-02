@@ -1,6 +1,8 @@
 package music.Renderer;
 
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,7 +18,7 @@ public class CompilationListRenderer extends DefaultListCellRenderer {
     private static final Color ODD_ROW_BACKGROUND = new Color(245, 248, 250);
     private static final int PADDING = 5;
     private static final int BORDER_WIDTH = 15;
-
+    private final MusicCompilationService compilationService=new MusicCompilationService();
     /**
      * Налаштовує компонент для відображення елемента списку.
      *
@@ -56,7 +58,7 @@ public class CompilationListRenderer extends DefaultListCellRenderer {
                 PADDING,
                 compilation.getTitle(),
                 compilation.getTracks().size(),
-                compilation.calculateTotalDuration().toMinutes()
+                compilationService.calculateTotalDuration(compilation.getTracks()).toMinutes()
         ));
     }
 

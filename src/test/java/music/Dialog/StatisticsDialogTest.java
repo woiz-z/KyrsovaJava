@@ -1,8 +1,9 @@
 package music.Dialog;
 
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +31,6 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.doubleThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -51,7 +51,7 @@ class StatisticsDialogTest {
 
     private MockedStatic<LogManager> mockedLogManager;
     private MockedStatic<JOptionPane> mockedJOptionPane;
-
+    private static final MusicCompilationService compilationService=new MusicCompilationService();
 
     @BeforeEach
     void setUp() {
@@ -60,7 +60,6 @@ class StatisticsDialogTest {
         mockedLogManager.when(() -> LogManager.getLogger(any(Class.class))).thenReturn(mockLogger);
 
         mockedJOptionPane = Mockito.mockStatic(JOptionPane.class);
-
         realParentFrame = new JFrame();
 
 
@@ -70,8 +69,8 @@ class StatisticsDialogTest {
         if (mockCompilation.getTracks() == null) {
             when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
         }
-        if (mockCompilation.calculateTotalDuration() == null) {
-            when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
+        if (compilationService.calculateTotalDuration(mockCompilation.getTracks()) == null) {
+            when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ZERO);
         }
 
         statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
@@ -95,7 +94,7 @@ class StatisticsDialogTest {
 
         if (statisticsDialog == null) {
             when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
-            when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
+            when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ZERO);
             statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
         }
         assertNotNull(statisticsDialog.getContentPane().getComponent(0));
@@ -106,7 +105,7 @@ class StatisticsDialogTest {
     void testConfigureWindowProperties() {
         if (statisticsDialog == null) {
             when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
-            when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
+            when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ZERO);
             statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
         }
         assertEquals(1400, statisticsDialog.getWidth());
@@ -117,10 +116,9 @@ class StatisticsDialogTest {
 
     @Test
     void testCreateHeaderPanel() {
-        when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
-        when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
-        if (statisticsDialog == null) { statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation); }
-
+        // `mockCompilation.getTracks()` is already stubbed in `setUp`.
+        // `statisticsDialog` is also initialized in `setUp`.
+        // The previous incorrect `when(compilationService.calculateTotalDuration(...))` line has been removed.
 
         JPanel headerPanel = statisticsDialog.createHeaderPanel();
         assertNotNull(headerPanel);
@@ -134,19 +132,22 @@ class StatisticsDialogTest {
         assertTrue(southComponent instanceof JLabel);
     }
 
-
     @Test
     void testCreateInfoLabel() {
         List<MusicTrack> tracksForInfo = new ArrayList<>();
         tracksForInfo.add(new MusicTrack("T1", "A1", MusicGenre.POP, Duration.ofMinutes(3)));
         tracksForInfo.add(new MusicTrack("T2", "A2", MusicGenre.ROCK, Duration.ofMinutes(4)));
-        when(mockCompilation.getTracks()).thenReturn(tracksForInfo);
-        when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ofMinutes(7));
-        if (statisticsDialog == null) { statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation); }
+        when(mockCompilation.getTracks()).thenReturn(tracksForInfo); // Correctly stubs mockCompilation.getTracks() for *this test*.
 
+        // REMOVED: This `when` call was incorrect as `compilationService` in the test is a real object.
+        // The dialog itself uses its *own* internal `MusicCompilationService` instance (also real).
+        // To test the info label, we want `statisticsDialog` to compute the actual duration.
+        // when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ofMinutes(7));
 
         JLabel infoLabel = statisticsDialog.createInfoLabel();
         assertNotNull(infoLabel);
+        // The `expectedText` relies on the `statisticsDialog`'s internal `compilationService`
+        // correctly calculating the total duration of the `tracksForInfo` list (3+4=7 minutes).
         String expectedText = String.format("%d треків • %d хв %d сек",
                 2, 7, 0);
         assertEquals(expectedText, infoLabel.getText());
@@ -173,11 +174,7 @@ class StatisticsDialogTest {
 
     @Test
     void testCreateButtonPanel() {
-        if (statisticsDialog == null) {
-            when(mockCompilation.getTracks()).thenReturn(new ArrayList<>());
-            when(mockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
-            statisticsDialog = new StatisticsDialog(realParentFrame, mockCompilation);
-        }
+        // `statisticsDialog` is initialized in `@BeforeEach`.
         JPanel buttonPanel = statisticsDialog.createButtonPanel();
         assertNotNull(buttonPanel);
         assertTrue(buttonPanel.getLayout() instanceof FlowLayout);
@@ -191,8 +188,10 @@ class StatisticsDialogTest {
 
         MusicCompilation newMockCompilation = mock(MusicCompilation.class);
         when(newMockCompilation.getTitle()).thenReturn("New Comp");
+        // CORRECTED: Line 195 - Ensure it returns a List<MusicTrack>.
         when(newMockCompilation.getTracks()).thenReturn(new ArrayList<>());
-        when(newMockCompilation.calculateTotalDuration()).thenReturn(Duration.ZERO);
+        // REMOVED: This was another attempt to stub a real object (compilationService in the test class).
+        // when(compilationService.calculateTotalDuration(mockCompilation.getTracks())).thenReturn(Duration.ZERO);
 
         JFrame localParent = new JFrame();
         StatisticsDialog dialogToDispose = spy(new StatisticsDialog(localParent, newMockCompilation));

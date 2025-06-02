@@ -1,11 +1,10 @@
 package music.Panel;
 
-import music.Music.MusicTrack;
-import music.Music.MusicGenre;
+import music.Models.MusicTrack;
+import music.Models.MusicGenre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
-import java.awt.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;

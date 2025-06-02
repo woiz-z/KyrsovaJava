@@ -1,10 +1,8 @@
-package music.Music;
+package music.Models;
 
+import music.Service.MusicCompilationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import java.time.Duration;
 import java.util.List;
@@ -17,7 +15,7 @@ class MusicCompilationTest {
     private MusicTrack track1;
     private MusicTrack track2;
     private MusicTrack track3;
-
+    private static final MusicCompilationService compilationService=new MusicCompilationService();
     @BeforeEach
     void setUp() {
         compilation = new MusicCompilation("Test Compilation");
@@ -104,14 +102,14 @@ class MusicCompilationTest {
 
     @Test
     void calculateTotalDuration_ShouldReturnZeroForEmptyCompilation() {
-        assertEquals(Duration.ZERO, compilation.calculateTotalDuration());
+        assertEquals(Duration.ZERO, compilationService.calculateTotalDuration(compilation.getTracks()));
     }
 
     @Test
     void calculateTotalDuration_ShouldReturnSumOfTrackDurations() {
         compilation.addTrack(track1);
         compilation.addTrack(track2);
-        assertEquals(Duration.ofMinutes(8), compilation.calculateTotalDuration());
+        assertEquals(Duration.ofMinutes(8), compilationService.calculateTotalDuration(compilation.getTracks()));
     }
 
     @Test
@@ -120,7 +118,7 @@ class MusicCompilationTest {
         compilation.addTrack(track1);
         compilation.addTrack(track2);
 
-        compilation.sortByGenre();
+        compilationService.sortByGenre(compilation.getTracks());
 
         List<MusicTrack> sortedTracks = compilation.getTracks();
         assertEquals(MusicGenre.JAZZ, sortedTracks.get(0).getGenre());
@@ -134,7 +132,8 @@ class MusicCompilationTest {
         compilation.addTrack(track2);
         compilation.addTrack(track3);
 
-        List<MusicTrack> result = compilation.findTracksByDurationRange(
+        List<MusicTrack> result = compilationService.filterByDurationRange(
+                compilation.getTracks(),
                 Duration.ofMinutes(4),
                 Duration.ofMinutes(6)
         );
@@ -146,35 +145,35 @@ class MusicCompilationTest {
     @Test
     void findTracksByDurationRange_ShouldThrowExceptionWhenMinIsNull() {
         assertThrows(IllegalArgumentException.class, () ->
-                compilation.findTracksByDurationRange(null, Duration.ofMinutes(5))
+                compilationService.filterByDurationRange(null, Duration.ofMinutes(5), Duration.ofMinutes(0))
         );
     }
 
     @Test
     void findTracksByDurationRange_ShouldThrowExceptionWhenMaxIsNull() {
         assertThrows(IllegalArgumentException.class, () ->
-                compilation.findTracksByDurationRange(Duration.ofMinutes(2), null)
+                compilationService.filterByDurationRange(compilation.getTracks(),Duration.ofMinutes(2), null)
         );
     }
 
     @Test
     void findTracksByDurationRange_ShouldThrowExceptionWhenMinIsNegative() {
         assertThrows(IllegalArgumentException.class, () ->
-                compilation.findTracksByDurationRange(Duration.ofMinutes(-1), Duration.ofMinutes(5))
+                compilationService.filterByDurationRange(compilation.getTracks(),Duration.ofMinutes(-1), Duration.ofMinutes(5))
         );
     }
 
     @Test
     void findTracksByDurationRange_ShouldThrowExceptionWhenMaxIsNegative() {
         assertThrows(IllegalArgumentException.class, () ->
-                compilation.findTracksByDurationRange(Duration.ofMinutes(2), Duration.ofMinutes(-1))
+                compilationService.filterByDurationRange(compilation.getTracks(),Duration.ofMinutes(2), Duration.ofMinutes(-1))
         );
     }
 
     @Test
     void findTracksByDurationRange_ShouldThrowExceptionWhenMinGreaterThanMax() {
         assertThrows(IllegalArgumentException.class, () ->
-                compilation.findTracksByDurationRange(Duration.ofMinutes(5), Duration.ofMinutes(2))
+                compilationService.filterByDurationRange(compilation.getTracks(),Duration.ofMinutes(5), Duration.ofMinutes(2))
         );
     }
 

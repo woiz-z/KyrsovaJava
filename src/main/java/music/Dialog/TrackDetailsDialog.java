@@ -1,6 +1,6 @@
 package music.Dialog;
 
-import music.Music.MusicTrack;
+import music.Models.MusicTrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

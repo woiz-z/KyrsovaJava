@@ -2,9 +2,9 @@ package music.Panel;
 
 import music.Dialog.CompilationDetailsDialog;
 import music.Dialog.TrackDetailsDialog;
-import music.Music.MusicCompilation;
-import music.Music.MusicTrack;
-import music.Music.TrackListDragAndDropHandler;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+import music.Models.MusicTrack;
 import music.Renderer.ModernTrackListRenderer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +32,7 @@ public class TrackListPanel {
     private final TrackSearchPanel searchPanel;
     private final CompilationDetailsDialog parent;
     public MusicCompilation compilation;
-
+    private final MusicCompilationService compilationService=new MusicCompilationService();
     /**
      * Конструктор панелі списку треків.
      *
@@ -232,8 +232,8 @@ public class TrackListPanel {
 
                 headerPanel.updateInfo(
                         trackListModel.getSize(),
-                        compilation.calculateTotalDuration().toMinutes(),
-                        compilation.calculateTotalDuration().getSeconds()
+                        compilationService.calculateTotalDuration(compilation.getTracks()).toMinutes(),
+                        compilationService.calculateTotalDuration(compilation.getTracks()).getSeconds()
                 );
 
                 logger.info("Фільтр скинуто, відновлено {} треків", trackListModel.getSize());

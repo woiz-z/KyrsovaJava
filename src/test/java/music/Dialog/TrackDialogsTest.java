@@ -1,9 +1,9 @@
 package music.Dialog;
 
 import music.Manager.TrackDatabaseManager;
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import music.Panel.HeaderPanel;
 import music.Panel.TrackListPanel;
 import org.apache.logging.log4j.LogManager;

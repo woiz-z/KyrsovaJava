@@ -4,7 +4,7 @@ import music.Dialog.CompilationDetailsDialog;
 import music.Dialog.StatisticsDialog;
 import music.Dialog.TrackDialogs;
 import music.Manager.TrackDatabaseManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

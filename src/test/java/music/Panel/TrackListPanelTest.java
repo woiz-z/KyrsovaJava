@@ -1,10 +1,10 @@
 package music.Panel;
 
 import music.Dialog.CompilationDetailsDialog;
-import music.Music.MusicCompilation;
-import music.Music.MusicTrack;
-import music.Music.MusicGenre;
-import music.Panel.TrackListPanel;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+import music.Models.MusicTrack;
+import music.Models.MusicGenre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,7 +29,7 @@ class TrackListPanelTest {
     private CompilationDetailsDialog parentDialog;
     @Mock
     private HeaderPanel headerPanel;
-
+    private static final MusicCompilationService compilationService=new MusicCompilationService();
     private MusicCompilation compilation;
     private TrackListPanel trackListPanel;
 
@@ -244,7 +244,7 @@ class TrackListPanelTest {
                 new MusicTrack("Track 1", "Artist 1", MusicGenre.ROCK, Duration.ofMinutes(3))
         );
 
-        when(compilation.calculateTotalDuration()).thenThrow(new RuntimeException("Test exception"));
+        when(compilationService.calculateTotalDuration(compilation.getTracks())).thenThrow(new RuntimeException("Test exception"));
 
 
         try (MockedStatic<JOptionPane> mocked = Mockito.mockStatic(JOptionPane.class)) {

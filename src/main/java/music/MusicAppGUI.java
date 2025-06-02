@@ -5,7 +5,7 @@ import music.Factory.DialogFactory;
 import music.Factory.StatusBarFactory;
 import music.Factory.ToolBarFactory;
 import music.Manager.DiscManager;
-import music.Music.MusicCompilation;
+import music.Models.MusicCompilation;
 import music.Panel.CompilationListPanel;
 import music.Panel.CompilationSearchPanel;
 import org.apache.logging.log4j.LogManager;

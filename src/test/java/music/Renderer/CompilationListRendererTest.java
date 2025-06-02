@@ -1,8 +1,8 @@
 package music.Renderer;
 
-import music.Music.MusicCompilation;
-import music.Music.MusicGenre;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Models.MusicGenre;
+import music.Models.MusicTrack;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,7 +10,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.time.Duration;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -2,8 +2,9 @@ package music.Manager;
 
 import music.DatabaseConfig;
 import music.Dialog.CompilationDetailsDialog;
-import music.Music.MusicCompilation;
-import music.Music.MusicTrack;
+import music.Models.MusicCompilation;
+import music.Service.MusicCompilationService;
+import music.Models.MusicTrack;
 import music.Panel.HeaderPanel;
 import music.Panel.TrackListPanel;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 public class TrackDatabaseManager {
     private static final Logger logger = LogManager.getLogger(TrackDatabaseManager.class);
+    private static final MusicCompilationService compilationService=new MusicCompilationService();
+
 
     /**
      * Додає новий трек до компіляції та зберігає його в базі даних.
@@ -134,16 +137,14 @@ public class TrackDatabaseManager {
                 tracks.add(trackListPanel.getTrackListModel().get(i));
             }
 
-            // ВИПРАВЛЕННЯ: Сортування за назвою жанру (якщо MusicGenre має метод toString() або getName())
-            // Або за порядковим номером, якщо це очікувана поведінка.
-            // Для відповідності тесту, який очікує алфавітного порядку:
+
             tracks.sort(Comparator.comparing(track -> track.getGenre().toString()));
 
             trackListPanel.getTrackListModel().clear();
             tracks.forEach(trackListPanel.getTrackListModel()::addElement);
 
             updateCompilationTracks(compilation, trackListPanel);
-            updateTracksInDatabase((CompilationDetailsDialog) trackListPanel.getParent(), compilation, trackListPanel); // Приведення типу, якщо необхідно
+            updateTracksInDatabase((CompilationDetailsDialog) trackListPanel.getParent(), compilation, trackListPanel);
 
             JOptionPane.showMessageDialog(trackListPanel.getParent(),
                     "Треки успішно відсортовані за жанром",
@@ -334,8 +335,8 @@ public class TrackDatabaseManager {
             HeaderPanel headerPanel = new HeaderPanel(compilation);
             headerPanel.updateInfo(
                     trackListPanel.getTrackListModel().getSize(),
-                    compilation.calculateTotalDuration().toMinutes(),
-                    compilation.calculateTotalDuration().getSeconds()
+                    compilationService.calculateTotalDuration(compilation.getTracks()).toMinutes(),
+                    compilationService.calculateTotalDuration(compilation.getTracks()).getSeconds()
             );
         } catch (Exception ex) {
             logger.error("Помилка при оновленні інформації заголовка: {}", ex.getMessage(), ex);
